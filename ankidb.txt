@@ -1,4 +1,4 @@
-;crank-arm;forgattyukar
+2015-08-13 07:07:25;crank-arm;forgattyukar
 ;cog;fogaskerek
 ;spoke;kullo
 ;rim;abroncs

@@ -6,6 +6,7 @@
 #define __USE_XOPEN
 #endif
 #include <time.h>
+//#include <regex.h>
 
 char* curtime()
 
@@ -36,6 +37,50 @@ char* curtime()
     //return EXIT_SUCCESS;
     return c_time_string;
 }
+
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <errno.h>
+//#include <sys/types.h>
+//#include <regex.h>
+//
+//#define tofind    "[a-z A-Z] $"
+//
+//int main(int argc, char **argv)
+//{
+//    FILE *fp;
+//    char line[1024];
+//    int retval = 0;
+//    regex_t re;
+//    //this file has this line "DAEMONS=(sysklogd network sshd !netfs !crond)"
+//    const char *filename = "/etc/rc.conf";
+//
+//    if (argc > 1)
+//        filename = argv[1];
+//
+//    if (regcomp(&re, tofind, REG_EXTENDED) != 0)
+//    {
+//        fprintf(stderr, "Failed to compile regex '%s'\n", tofind);
+//        return EXIT_FAILURE;
+//    }
+//
+//    fp = fopen(filename, "r");
+//    if (fp == 0)
+//    {
+//        fprintf(stderr, "Failed to open file %s (%d: %s)\n",
+//                filename, errno, strerror(errno));
+//        return EXIT_FAILURE;
+//    }
+//
+//    while ((fgets(line, 1024, fp)) != NULL)
+//    {
+//        line[strlen(line)-1] = '\0';
+//        if ((retval = regexec(&re, line, 0, NULL, 0)) == 0)
+//            printf("<<%s>>\n", line);
+//    }
+//    return EXIT_SUCCESS;
+//}
 
 int main(void)
 
