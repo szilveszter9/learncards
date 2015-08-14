@@ -82,6 +82,18 @@ char* curtime()
 //    return EXIT_SUCCESS;
 //}
 
+struct lesson {
+    char date[19];
+    //char card_front[128];
+    //char card_back[128];
+    char *card_front;
+    char *card_back;
+    int seen;
+    int score;
+};
+
+char nextchar;
+
 int main(void)
 
 {
@@ -90,6 +102,8 @@ int main(void)
 
     /* Allocate lines of text */
     char **words = (char **)malloc(sizeof(char*)*lines_allocated);
+    //struct lesson lessons[sizeof(char*)*lines_allocated];
+    struct lesson* lessons = malloc(max_line_len * sizeof(struct lesson));;
     if (words==NULL)
     {
         fprintf(stderr,"Out of memory (1).\n");
@@ -104,16 +118,22 @@ int main(void)
     }
 
     int i;
-    for (i=0;1;i++)
+    for (i=0;;i++)
     {
         int j;
+        int column = 0;
 
-        /* Have we gone over our line allocation? */
+        lessons[i].card_front = malloc(128);
+        lessons[i].card_back = malloc(128);
+
+        /*
+        //printf("%i %i %i\n",i,lines_allocated);
+        // Have we gone over our line allocation?
         if (i >= lines_allocated)
         {
             int new_size;
 
-            /* Double our allocation and re-allocate */
+            // Double our allocation and re-allocate
             new_size = lines_allocated*2;
             words = (char **)realloc(words,sizeof(char*)*new_size);
             if (words==NULL)
@@ -123,7 +143,7 @@ int main(void)
             }
             lines_allocated = new_size;
         }
-        /* Allocate space for the next line */
+        // Allocate space for the next line
         words[i] = malloc(max_line_len);
         if (words[i]==NULL)
         {
@@ -133,18 +153,32 @@ int main(void)
         if (fgets(words[i],max_line_len-1,fp)==NULL)
             break;
 
-        /* Get rid of CR or LF at end of line */
+        // Get rid of CR or LF at end of line
         for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--)
             ;
         words[i][j+1]='\0';
+        */
+        for (j=0;;j++){
+            nextchar=fgetc(fp);
+            if(nextchar == '\n' || nextchar == '\r' || nextchar == EOF){
+                break;
+            }
+            else if(nextchar == ';'){
+                column++;
+                j = -1;
+            }
+            else if(column==0) lessons[i].date[j] = nextchar;
+            else if(column==1) lessons[i].card_front[j] = nextchar;
+            else if(column==2) lessons[i].card_back[j] = nextchar;
+        }
+        if(nextchar==EOF) break;
     }
     /* Close file */
     fclose(fp);
 
     int j;
-    //for(j = 0; j < i; j++)
-    for(j = 0; j < 10; j++)
-        printf("%s\n", words[j]);
+    for(j = 0; j < i; j++)
+        printf("date: %s front: %s ----- back: %s\n", lessons[j].date, lessons[j].card_front, lessons[j].card_back);
 
     char *curr_time = curtime();
     printf("%s\n", curr_time);
