@@ -88,9 +88,11 @@ struct lesson {
     //char card_back[128];
     char *card_front;
     char *card_back;
+    char *score;
     int seen;
-    int score;
 };
+
+typedef int (*compfn)(const void*, const void*);
 
 char nextchar;
 
@@ -125,6 +127,7 @@ int main(void)
 
         lessons[i].card_front = malloc(128);
         lessons[i].card_back = malloc(128);
+        lessons[i].score = malloc(32);
 
         /*
         //printf("%i %i %i\n",i,lines_allocated);
@@ -168,8 +171,9 @@ int main(void)
                 j = -1;
             }
             else if(column==0) lessons[i].date[j] = nextchar;
-            else if(column==1) lessons[i].card_front[j] = nextchar;
-            else if(column==2) lessons[i].card_back[j] = nextchar;
+            else if(column==1) lessons[i].score[j] = nextchar;
+            else if(column==2) lessons[i].card_front[j] = nextchar;
+            else if(column==3) lessons[i].card_back[j] = nextchar;
         }
         if(nextchar==EOF) break;
     }
@@ -178,7 +182,30 @@ int main(void)
 
     int j;
     for(j = 0; j < i; j++)
-        printf("date: %s front: %s ----- back: %s\n", lessons[j].date, lessons[j].card_front, lessons[j].card_back);
+        printf("date: %s, score: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].score), lessons[j].card_front, lessons[j].card_back);
+
+    int compare(struct lesson *elem1, struct lesson *elem2)
+    {
+        if (atoi(elem1->score) < atoi(elem2->score))
+            return -1;
+
+        else if (atoi(elem1->score) > atoi(elem2->score))
+            return 1;
+
+        else
+            return 0;
+    }
+
+    printf("----------\n");
+
+    qsort(lessons,
+            11,
+            sizeof(struct lesson),
+            (compfn)compare
+         );
+
+    for(j = 0; j < i; j++)
+        printf("date: %s, score: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].score), lessons[j].card_front, lessons[j].card_back);
 
     char *curr_time = curtime();
     printf("%s\n", curr_time);

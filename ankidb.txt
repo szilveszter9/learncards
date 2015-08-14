@@ -1,11 +1,11 @@
-2015-08-13 07:07:25;crank-arm;forgattyukar
-2015-08-13 07:07:25;cog;fogaskerek
-2015-08-13 07:07:25;spoke;kullo
-2015-08-13 07:07:25;rim;abroncs
-2015-08-13 07:07:25;clamp;kapocs,fogo,saru,satu
-2015-08-13 07:07:25;protrude;kiall,eloreall
-2015-08-13 07:07:25;suspension;felfuggesztes
-2015-08-13 07:07:25;valve stem;szelep szar
-2015-08-13 07:07:25;stem;sza'r
-2015-08-13 07:07:25;drivetrain;hajtomu
-2015-08-13 07:07:25;penalty;buntetes
+2015-08-13 07:07:25;5;crank-arm;forgattyukar
+2015-08-13 07:07:25;2;cog;fogaskerek
+2015-08-13 07:07:25;1;spoke;kullo
+2015-08-13 07:07:25;3;rim;abroncs
+2015-08-13 07:07:25;4;clamp;kapocs,fogo,saru,satu
+2015-08-13 07:07:25;8;protrude;kiall,eloreall
+2015-08-13 07:07:25;7;suspension;felfuggesztes
+2015-08-13 07:07:25;6;valve stem;szelep szar
+2015-08-13 07:07:25;9;stem;sza'r
+2015-08-13 07:07:25;2;drivetrain;hajtomu
+2015-08-13 07:07:25;3;penalty;buntetes
