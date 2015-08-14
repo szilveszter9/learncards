@@ -100,7 +100,7 @@ int main(void)
 
 {
     int lines_allocated = 128;
-    int max_line_len = 100;
+    int max_line_len = 500000;
 
     /* Allocate lines of text */
     char **words = (char **)malloc(sizeof(char*)*lines_allocated);
@@ -199,7 +199,7 @@ int main(void)
     printf("----------\n");
 
     qsort(lessons,
-            11,
+            i,
             sizeof(struct lesson),
             (compfn)compare
          );
@@ -230,8 +230,8 @@ int main(void)
     //printf("%d\n", elapsed1);
 
     /* Good practice to free memory */
-    for (;i>=0;i--)
-        free(words[i]);
-    free(words);
+    //for (;i>=0;i--)
+    //    free(words[i]);
+    //free(words);
     return 0;
 }
