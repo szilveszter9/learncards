@@ -204,8 +204,17 @@ int main(void)
             (compfn)compare
          );
 
-    for(j = 0; j < i; j++)
-        printf("date: %s, score: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].score), lessons[j].card_front, lessons[j].card_back);
+    for(j = 0; j < 10; j++) {
+        printf("date: %s, score: %i, front: %s\n", lessons[j].date, atoi(lessons[j].score), lessons[j].card_front);
+        int a;
+        printf("Press any key to show the solution: ");
+        getch();
+        printf("solution is: %s\n", lessons[j].card_back);
+        printf("press you score 0-worst, 5-best: ");
+        scanf("%d", &a);
+        printf("You entered: %d\n", a);
+        a = -1;
+    }
 
     char *curr_time = curtime();
     printf("%s\n", curr_time);
