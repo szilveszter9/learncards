@@ -238,29 +238,36 @@ void create_new_card(){
     char *experience = malloc(32);
     int xp_int = 0;
 
+    // ask for user input
     printf("\n enter card front:");
     fgets(card_front, 128, stdin);
     strtok(card_front, "\n");
-    printf("    enter card back:");
+
+    printf(" enter card back:");
     fgets(card_back, 128, stdin);
     strtok(card_back, "\n");
-    printf("    enter experience:");
 
+    printf(" enter experience:");
     fgets(experience, 32, stdin);
     strtok(experience, "\n");
 
+    // allocate memory
     lessons[lessons_size].card_front = malloc(128);
     lessons[lessons_size].card_back = malloc(128);
     lessons[lessons_size].experience = malloc(32);
 
+    // set front, back, and experience
     lessons[lessons_size].card_front = card_front;
     lessons[lessons_size].card_back = card_back;
     sprintf(lessons[lessons_size].experience, "%i", atoi(experience));
 
+    // set current date/time
     time_t t = time(NULL);
     struct tm now = *localtime(&t);
     char strformat[] = "%Y-%m-%d %H:%M:%S";
     strftime(lessons[lessons_size].date, 20, strformat, &now);
+
+    printf("               ...saved.\n");
 
     lessons_size++;
 }
@@ -285,6 +292,7 @@ void handle_cli_options(int argc, char *argv[]) {
             exit(0);
         }
         if(is("a") || is("add")) {
+            printf("\n Press Ctrl-c to stop.");
             load_lessons();
             while(1) {
                 create_new_card();
