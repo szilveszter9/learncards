@@ -239,16 +239,15 @@ void create_new_card(){
     int xp_int = 0;
 
     printf("\n enter card front:");
-    scanf("%s", card_front);
+    fgets(card_front, 128, stdin);
+    strtok(card_front, "\n");
     printf("    enter card back:");
-    scanf("%s", card_back);
+    fgets(card_back, 128, stdin);
+    strtok(card_back, "\n");
     printf("    enter experience:");
 
-    // consume \n that scanf left there in order to use fgets after scanf at all
-    getchar();
     fgets(experience, 32, stdin);
     strtok(experience, "\n");
-    printf("-%s-", experience);
 
     lessons[lessons_size].card_front = malloc(128);
     lessons[lessons_size].card_back = malloc(128);
