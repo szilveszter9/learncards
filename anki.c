@@ -3,13 +3,13 @@
 #include <string.h>
 #include <termios.h>
 
-char *db_file;
-char *db_temp_file;
-char *db_backup_file;
+char *db_file_name;
+char *db_tempfile_name;
+char *db_backup_file_name;
 int lessons_size = 0;
 char nextchar;
 int shortwelcome;
-int max_line_len = 500000;
+int max_line_len = 50000;
 char *cmd;
 
 typedef struct lesson_class_struct {
@@ -25,9 +25,9 @@ lesson *lessons;
 static struct termios old, new;
 
 void init(){
-    db_file = "ankidb.txt";
-    db_temp_file = "ankidbw.txt";
-    db_backup_file = "ankidb.bak";
+    db_file_name = "ankidb.txt";
+    db_tempfile_name = "ankidbw.txt";
+    db_backup_file_name = "ankidb.bak";
 }
 
 void print_help(){
@@ -65,23 +65,23 @@ void welcome_help(){
 }
 
 void print_header(){
-    printf("\n\n           *** Happy studying! ***");
+    printf("\n\n*********************** Happy studying! ********************");
     printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
     printf("\n %-20s%-20s%-5s%-20s",   "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
 }
 
 void create_new_db_file(){
-    FILE *fp = fopen(db_file, "r");
+    FILE *fp = fopen(db_file_name, "r");
     if(fp == NULL) {
-        FILE *fpw = fopen(db_file, "w");
+        FILE *fpw = fopen(db_file_name, "w");
         fprintf(fpw, "2015-08-13 07:07:25;0;penalty;buntetes\n");
         fprintf(fpw, "2015-08-13 07:07:25;0;drivetrain;hajtomu\n");
-        printf("***info*** %s has been created.\n", db_file);
+        printf("***info*** %s has been created.\n", db_file_name);
         fclose(fpw);
     }
     else {
         fclose(fp);
-        fprintf(stderr,"***error*** %s already exists.\n", db_file);
+        fprintf(stderr,"***error*** %s already exists.\n", db_file_name);
     }
 }
 
@@ -136,10 +136,10 @@ typedef int (*compfn)(const void*, const void*);
 
 int compare_for_qsort(lesson *elem1, lesson *elem2)
 {
-    if (atoi(elem1->experience) < atoi(elem2->experience))
+    if(atoi(elem1->experience) < atoi(elem2->experience))
         return -1;
 
-    else if (atoi(elem1->experience) > atoi(elem2->experience))
+    else if(atoi(elem1->experience) > atoi(elem2->experience))
         return 1;
 
     else
@@ -147,42 +147,43 @@ int compare_for_qsort(lesson *elem1, lesson *elem2)
 }
 
 lesson *read_lessons(char *filename){
+    free(lessons);
     lessons = malloc(max_line_len * sizeof(struct lesson_class_struct));
 
     FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
+    if(fp == NULL)
     {
         fprintf(stderr,"Could not find the default database text file.\n");
         fprintf(stderr,"You can create a template with %s --create-template\n", cmd);
         exit(2);
     }
 
-    for (int i=0;;i++)
+    for(int c_line=0;; c_line++)
     {
-        int j;
+        int c_char;
         int column = 0;
 
-        lessons[i].card_front = malloc(128);
-        lessons[i].card_back = malloc(128);
-        lessons[i].experience = malloc(32);
+        lessons[c_line].card_front = malloc(128);
+        lessons[c_line].card_back = malloc(128);
+        lessons[c_line].experience = malloc(32);
 
-        for (j=0;;j++){
+        for(c_char=0;; c_char++){
             nextchar=fgetc(fp);
             if(nextchar == '\n' || nextchar == '\r' || nextchar == EOF){
                 break;
             }
             else if(nextchar == ';'){
                 column++;
-                j = -1;
+                c_char = -1;
             }
-            else if(column==0) lessons[i].date[j] = nextchar;
-            else if(column==1) lessons[i].experience[j] = nextchar;
-            else if(column==2) lessons[i].card_front[j] = nextchar;
-            else if(column==3) lessons[i].card_back[j] = nextchar;
+            else if(column==0) lessons[c_line].date[c_char] = nextchar;
+            else if(column==1) lessons[c_line].experience[c_char] = nextchar;
+            else if(column==2) lessons[c_line].card_front[c_char] = nextchar;
+            else if(column==3) lessons[c_line].card_back[c_char] = nextchar;
         }
         if(nextchar==EOF){
             fclose(fp);
-            lessons_size = i;
+            lessons_size = c_line;
             qsort(lessons, lessons_size, sizeof(lesson), (compfn)compare_for_qsort);
             return lessons;
         }
@@ -190,35 +191,35 @@ lesson *read_lessons(char *filename){
 }
 
 void save_lessons() {
-    FILE *fpw = fopen(db_temp_file, "w");
-    if (fpw == NULL)
+    FILE *fpw = fopen(db_tempfile_name, "w");
+    if(fpw == NULL)
     {
         fprintf(stderr,"Error opening file.\n");
         exit(2);
     }
     else {
-        for(int line = 0;line<lessons_size;line++) {
-            fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
+        for(int c_line = 0; c_line<lessons_size; c_line++) {
+            fprintf(fpw, "%s;%i;%s;%s\n", lessons[c_line].date, atoi(lessons[c_line].experience), lessons[c_line].card_front, lessons[c_line].card_back);
         }
         fclose(fpw);
     }
 
     //TODO check new filesize, should not be smaller than the previous
-    if(rename(db_file,db_backup_file)==0)
-        rename(db_temp_file,db_file);
+    if(rename(db_file_name, db_backup_file_name)==0)
+        rename(db_tempfile_name, db_file_name);
 }
 
-void handle_options(int argc, char *argv[]){
-    for (int i=1;i<argc;i++) {
-        if(strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
+void handle_cli_options(int argc, char *argv[]){
+    for(int c_arg_idx=1; c_arg_idx<argc; c_arg_idx++) {
+        if(strcmp(argv[c_arg_idx], "-h")==0 || strcmp(argv[c_arg_idx], "--help")==0) {
             print_help();
             exit(0);
         }
-        if(strcmp(argv[i], "-c")==0 || strcmp(argv[i], "--create-template")==0) {
+        if(strcmp(argv[c_arg_idx], "-c")==0 || strcmp(argv[c_arg_idx], "--create-template")==0) {
             create_new_db_file();
             exit(0);
         }
-        if(strcmp(argv[i], "-s")==0 || strcmp(argv[i], "--shortwelcome")==0) {
+        if(strcmp(argv[c_arg_idx], "-s")==0 || strcmp(argv[c_arg_idx], "--shortwelcome")==0) {
             shortwelcome = 1;
         }
     }
@@ -237,7 +238,7 @@ int ask_for_proper_did_know(){
 
 void save_and_reload_lessons() {
     save_lessons();
-    lessons = read_lessons(db_file);
+    lessons = read_lessons(db_file_name);
     printf("\n***info*** save and reload lessons\n");
 }
 
@@ -247,48 +248,48 @@ int main(int argc, char *argv[])
     cmd = argv[0];
     init();
 
-    handle_options(argc, argv);
+    handle_cli_options(argc, argv);
 
-    lesson* lessons;
-    lessons = read_lessons(db_file);
+    read_lessons(db_file_name);
 
     if(!shortwelcome)
         welcome_help();
 
     print_header();
 
-    int j = 0;
+    int c_line = 0;
     int finished=0;
 
     while(finished==0) {
-        for(int k=0;k<4;k++,j++){
+        for(int c_quiz=0; c_quiz<4; c_quiz++, c_line++){
 
-            if(j>lessons_size-1) {
-                j = 0;
+            // reload if out of lessons
+            if(c_line>lessons_size-1) {
+                c_line = 0;
                 save_and_reload_lessons();
             }
 
             // print card_front
-            printf("\n %-20s", lessons[j].card_front);
+            printf("\n %-20s", lessons[c_line].card_front);
 
             // wait for card_back
             getch();
-            printf("%-20s", lessons[j].card_back);
+            printf("%-20s", lessons[c_line].card_back);
 
             // ask for experience
             int did_know = ask_for_proper_did_know(0);
             printf("(%i)", did_know);
 
             // print experience calculation
-            int old_xp = atoi(lessons[j].experience);
+            int old_xp = atoi(lessons[c_line].experience);
             int add_xp = did_know*did_know;
             printf("%5i+%i", old_xp, add_xp);
 
             // set new experience
-            sprintf(lessons[j].experience, "%i", old_xp + add_xp);
+            sprintf(lessons[c_line].experience, "%i", old_xp + add_xp);
 
             // print sum experience
-            printf("=%4s\n", lessons[j].experience);
+            printf("=%4s\n", lessons[c_line].experience);
         }
 
         save_lessons();
@@ -298,5 +299,6 @@ int main(int argc, char *argv[])
     }
     printf("\n");
 
+    free(lessons);
     return 0;
 }
