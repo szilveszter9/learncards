@@ -148,22 +148,23 @@ struct lesson {
 
 typedef int (*compfn)(const void*, const void*);
 
-int verbose;
 char nextchar;
+int shortwelcome;
 
 int main(int argc, char *argv[])
 
 {
-    for (int i=0;i<argc;i++) {
-        if(strcmp(argv[i], "-v")==0)
-            verbose = 1;
+    for (int i=1;i<argc;i++) {
         if(strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
             printf("\nanki clone in your console");
             printf("\n\nOptions");
             printf("\n -h, --help    show help");
-            printf("\n -v            increase verbosity");
+            printf("\n -s, --shortwelcome  short welcome message on start.");
             printf("\n");
             return 0;
+        }
+        if(strcmp(argv[i], "-s")==0 || strcmp(argv[i], "--shortwelcome")==0) {
+            shortwelcome = 1;
         }
     }
     int lines_allocated = 128;
@@ -186,8 +187,8 @@ int main(int argc, char *argv[])
         exit(2);
     }
 
-    int i;
-    for (i=0;;i++)
+    int lessons_length;
+    for (int i=0;;i++)
     {
         int j;
         int column = 0;
@@ -242,14 +243,16 @@ int main(int argc, char *argv[])
             else if(column==2) lessons[i].card_front[j] = nextchar;
             else if(column==3) lessons[i].card_back[j] = nextchar;
         }
-        if(nextchar==EOF) break;
+        if(nextchar==EOF){
+            lessons_length = i;
+            break;
+        }
     }
     /* Close file */
     fclose(fp);
 
-    int j;
-    for(j = 0; j < i; j++)
-        printf("date: %s, experience: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front, lessons[j].card_back);
+    //for(int j = 0; j < i; j++)
+    //    printf("date: %s, experience: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front, lessons[j].card_back);
 
     int compare(struct lesson *elem1, struct lesson *elem2)
     {
@@ -263,60 +266,86 @@ int main(int argc, char *argv[])
             return 0;
     }
 
-    printf("----------\n");
-
     qsort(lessons,
-            i,
+            lessons_length,
             sizeof(struct lesson),
             (compfn)compare
          );
 
-    for(j = 0; j < 10; j++) {
-        printf("\n\n%i) date: %s, experience: %i, front: %s", j+1, lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front);
-        char *feels_know, *did_know;
-        feels_know = malloc(1);
-        did_know = malloc(1);
+    int finished=0;
+    if(!shortwelcome) {
+        printf("\n Help");
+        printf("\n 1) Press any key to show the solution.");
+        printf("\n 2) Use the (j), (k), and (l) buttons in order to add some points to your experience.");
+        printf("\n        key    extra points");
+        printf("\n        ~~~    ~~~~~~~~~~~~");
+        printf("\n        (j)        +1");
+        printf("\n        (k)        +4");
+        printf("\n        (l)        +9");
+        printf("\n 3) After every 4 cards you will be asked whether to continue.");
+        printf("\n        Meanwhile an automated save happens.");
+        printf("\n        (n) will stop the study and quit, hope to see you soon.");
+        printf("\n        any other keys will keep going, have fun with another 4 cards.");
+        printf("\n Run %s -h for more help", argv[0]);
+        printf("\n You can press Ctrl-c any time to quit without any changes to your scores.");
+    }
+    printf("\n\n           *** Happy studying! ***");
+    printf("\n\n%-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
+    printf("\n%-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
 
-        int f, d, lower, higher;
-        printf("\n Do you know the solution? Enter a number between 0 and 5, (0)-no idea, (5)-know it perfectly: ");
-        while(f==0) {
-            f = atoi(feels_know);
-            *feels_know = getche();
+    int j = 0;
+    while(finished==0) {
+        for(int k=0;k<4;k++,j++){
+            int did_know=0;
+            printf("\n%-20s", lessons[j].card_front);
+            getch();
+            printf("%-20s", lessons[j].card_back);
+            while(did_know<1 || did_know>3) {
+                did_know = getch() - '0';
+                if(did_know>3) {
+                    if(did_know==58) did_know=1;//button 'j' => 1
+                    if(did_know==59) did_know=2;//button 'k' => 2
+                    if(did_know==60) did_know=3;//button 'l' => 3
+                }
+                printf("(%i)", did_know);
+            }
+            printf("%5i+%i", atoi(lessons[j].experience), did_know*did_know);
+            sprintf(lessons[j].experience, "%i", atoi(lessons[j].experience) + did_know*did_know);
+            printf("=%4s\n", lessons[j].experience);
         }
-        printf("\n The solution is: %s", lessons[j].card_back);
-        printf("\n Did you know the solution? Enter a number between 0 and 5, (0)-I missed it, (5)-I knew it: ");
-        *did_know = getche();
-        d = atoi(did_know);
-        if(f>d) {lower = d; higher = f;}
-        else {lower = f; higher = d;}
-        //if(f == 5 || d == 5) {
-            //printf("\n Experience points increased by (%i-%i+1)*(5-%i)=%i", higher, lower, d, (higher-lower+1)*(5-d));
-            printf("\n Experience points increased by %i", d);
-            sprintf(lessons[j].experience, "%i", atoi(lessons[j].experience) + d);
-            printf("%i", *lessons[j].experience);
-        //}
+
+        FILE *fpw = fopen("ankidbw.txt", "w");
+        if (fpw == NULL)
+        {
+            fprintf(stderr,"Error opening file.\n");
+            exit(2);
+        }
+        else {
+            for(int line = 0; line < lessons_length; line++){
+                fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
+                printf("%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
+            }
+            fclose(fpw);
+        }
+
+        //TODO check new filesize, should not be smaller than the previous
+        if(rename("ankidb.txt","ankidb.bak")==0)
+            rename("ankidbw.txt","ankidb.txt");
+
+        printf("\ncontinue?  (n)-no  (any other keys)-yes\n");
+        finished = getch() - '0' == 62;
     }
+    printf("\n");
 
-    FILE *fpw = fopen("ankidbw.txt", "w");
-    if (fpw == NULL)
-    {
-        fprintf(stderr,"Error opening file.\n");
-        exit(2);
-    }
-    else {
-        for(j = 0; j < i; j++)
-            fprintf(fpw, "%s;%i;%s;%s\n", lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front, lessons[j].card_back);
-    }
+    ///////char *curr_time = curtime();
+    ///////printf("\n %s", curr_time);
 
-    char *curr_time = curtime();
-    printf("\n %s", curr_time);
+    ///////struct tm time1 = {0};
 
-    struct tm time1 = {0};
+    ///////char timestr[] = "2015-08-13 01:10:52 0000 BST";
+    ///////char strformat[] = "%Y-%m-%d %H:%M:%S %z %Z";
 
-    char timestr[] = "2015-08-13 01:10:52 0000 BST";
-    char strformat[] = "%Y-%m-%d %H:%M:%S %z %Z";
-
-    strptime(timestr, strformat, &time1);
+    ///////strptime(timestr, strformat, &time1);
     //puts(timestr);
     //strptime(timestr, strformat, &time1);
     //mktime(&time1);
@@ -325,7 +354,7 @@ int main(int argc, char *argv[])
 
     //double elapsed = difftime(&time1, time(NULL));
     //double elapsed1 = difftime(0, time(NULL));
-    printf("%zu\n", time(NULL) - mktime(&time1));
+    ///////printf("%zu\n", time(NULL) - mktime(&time1));
     //printf("%i\n", );
     //printf("%d\n", elapsed);
     //printf("%d\n", elapsed1);
