@@ -160,7 +160,7 @@ lesson *load_lessons() {
     if(fp == NULL)
     {
         fprintf(stderr,"Could not find the default database text file.\n");
-        fprintf(stderr,"You can create a template with %s --create-template\n", cmd);
+        fprintf(stderr,"You can create a template with %s --init-template\n", cmd);
         exit(2);
     }
 
@@ -236,7 +236,6 @@ void create_new_card(){
     char *card_front = malloc(128);
     char *card_back = malloc(128);
     char *experience = malloc(32);
-    int xp_int = 0;
 
     // ask for user input
     printf("\n enter card front:");
