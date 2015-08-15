@@ -1,40 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef __USE_XOPEN
-#define __USE_XOPEN
-#endif
-#include <time.h>
-//#include <regex.h>
-
 #include <termios.h>
-#include <stdio.h>
 
-void welcome_help(char *cmd){
-    printf("\n Help");
-    printf("\n 1) Press any key to show the solution.");
-    printf("\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience.");
-    printf("\n        key    extra points");
-    printf("\n        ~~~    ~~~~~~~~~~~~");
-    printf("\n        <j>         +1");
-    printf("\n        <k>         +4");
-    printf("\n        <l>         +9");
-    printf("\n");
-    printf("\n 3) After every 4 cards you will be asked whether to continue.*");
-    printf("\n        key          behaviour");
-    printf("\n        ~~~          ~~~~~~~~~");
-    printf("\n        <n>          will stop the study and quit, hope to see you soon.");
-    printf("\n        any other    will keep going, have fun with another 4 cards.");
-    printf("\n");
-    printf("\n    *Meanwhile an automated save happens.");
-    printf("\n");
-    printf("\n");
-    printf("\n Run %s -h for more help", cmd);
-    printf("\n You can use Ctrl-c any time to quit without any changes to your scores.");
-    printf("\n");
-    printf("\n");
-}
+char *db_file;
+char *db_temp_file;
+char *db_backup_file;
+int lessons_size = 0;
+char nextchar;
+int shortwelcome;
+int max_line_len = 500000;
+char *cmd;
 
 typedef struct lesson_class_struct {
     char date[19];
@@ -44,7 +20,70 @@ typedef struct lesson_class_struct {
     int seen;
 } lesson;
 
+lesson *lessons;
+
 static struct termios old, new;
+
+void init(){
+    db_file = "ankidb.txt";
+    db_temp_file = "ankidbw.txt";
+    db_backup_file = "ankidb.bak";
+}
+
+void print_help(){
+    printf("\nanki clone in your console"
+           "\n\nOptions"
+           "\n -h, --help    show help"
+           "\n -s, --shortwelcome  short welcome message on start."
+           "\n -c, --create-template  short welcome message on start."
+           "\n");
+}
+
+void welcome_help(){
+    printf("\n Help"
+           "\n 1) Press any key to show the solution."
+           "\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience."
+           "\n        key    extra points"
+           "\n        ~~~    ~~~~~~~~~~~~"
+           "\n        <j>         +1"
+           "\n        <k>         +4"
+           "\n        <l>         +9"
+           "\n"
+           "\n 3) After every 4 cards you will be asked whether to continue.*"
+           "\n        key          behaviour"
+           "\n        ~~~          ~~~~~~~~~"
+           "\n        <n>          will stop the study and quit, hope to see you soon."
+           "\n        any other    will keep going, have fun with another 4 cards."
+           "\n"
+           "\n    *Meanwhile an automated save happens."
+           "\n"
+           "\n");
+    printf("\n Run %s -h for more help", cmd);
+    printf("\n You can use Ctrl-c any time to quit without any changes to your scores."
+           "\n"
+           "\n");
+}
+
+void print_header(){
+    printf("\n\n           *** Happy studying! ***");
+    printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
+    printf("\n %-20s%-20s%-5s%-20s",   "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+}
+
+void create_new_db_file(){
+    FILE *fp = fopen(db_file, "r");
+    if(fp == NULL) {
+        FILE *fpw = fopen(db_file, "w");
+        fprintf(fpw, "2015-08-13 07:07:25;0;penalty;buntetes\n");
+        fprintf(fpw, "2015-08-13 07:07:25;0;drivetrain;hajtomu\n");
+        printf("***info*** %s has been created.\n", db_file);
+        fclose(fpw);
+    }
+    else {
+        fclose(fp);
+        fprintf(stderr,"***error*** %s already exists.\n", db_file);
+    }
+}
 
 /* Initialize new terminal i/o settings */
 void initTermios(int echo)
@@ -84,14 +123,18 @@ char getche(void)
   return getch_(1);
 }
 
+int get_jkl_buttons_value(int keycode){
+    switch(keycode){
+        case 58: return 1;      //button 'j' => 1
+        case 59: return 2;      //button 'k' => 2
+        case 60: return 3;      //button 'l' => 3
+        default: return keycode;
+    }
+}
+
 typedef int (*compfn)(const void*, const void*);
 
-char nextchar;
-int shortwelcome;
-
-int max_line_len = 500000;
-
-int compare(lesson *elem1, lesson *elem2)
+int compare_for_qsort(lesson *elem1, lesson *elem2)
 {
     if (atoi(elem1->experience) < atoi(elem2->experience))
         return -1;
@@ -104,12 +147,13 @@ int compare(lesson *elem1, lesson *elem2)
 }
 
 lesson *read_lessons(char *filename){
-    lesson *lessons = malloc(max_line_len * sizeof(struct lesson_class_struct));;
+    lessons = malloc(max_line_len * sizeof(struct lesson_class_struct));
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL)
     {
-        fprintf(stderr,"Error opening file.\n");
+        fprintf(stderr,"Could not find the default database text file.\n");
+        fprintf(stderr,"You can create a template with %s --create-template\n", cmd);
         exit(2);
     }
 
@@ -137,98 +181,117 @@ lesson *read_lessons(char *filename){
             else if(column==3) lessons[i].card_back[j] = nextchar;
         }
         if(nextchar==EOF){
-            /* Close file */
             fclose(fp);
-            qsort(lessons, sizeof(lessons), sizeof(lesson), (compfn)compare);
+            lessons_size = i;
+            qsort(lessons, lessons_size, sizeof(lesson), (compfn)compare_for_qsort);
             return lessons;
         }
     }
 }
 
-void save_lessons(lesson *lessons) {
-    FILE *fpw = fopen("ankidbw.txt", "w");
+void save_lessons() {
+    FILE *fpw = fopen(db_temp_file, "w");
     if (fpw == NULL)
     {
         fprintf(stderr,"Error opening file.\n");
         exit(2);
     }
     else {
-        for(int line = 0; line < sizeof(lessons); line++){
+        for(int line = 0;line<lessons_size;line++) {
             fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
         }
         fclose(fpw);
     }
 
     //TODO check new filesize, should not be smaller than the previous
-    if(rename("ankidb.txt","ankidb.bak")==0)
-        rename("ankidbw.txt","ankidb.txt");
+    if(rename(db_file,db_backup_file)==0)
+        rename(db_temp_file,db_file);
 }
 
-int main(int argc, char *argv[])
-
-{
+void handle_options(int argc, char *argv[]){
     for (int i=1;i<argc;i++) {
         if(strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
-            printf("\nanki clone in your console");
-            printf("\n\nOptions");
-            printf("\n -h, --help    show help");
-            printf("\n -s, --shortwelcome  short welcome message on start.");
-            printf("\n");
-            return 0;
+            print_help();
+            exit(0);
+        }
+        if(strcmp(argv[i], "-c")==0 || strcmp(argv[i], "--create-template")==0) {
+            create_new_db_file();
+            exit(0);
         }
         if(strcmp(argv[i], "-s")==0 || strcmp(argv[i], "--shortwelcome")==0) {
             shortwelcome = 1;
         }
     }
+}
 
-    if(!shortwelcome)
-        welcome_help(argv[0]);
+int ask_for_proper_did_know(){
+    int did_know = 0;
+    while(did_know<1 || did_know>3) {
+        did_know = getch() - '0';
+        if(did_know>3) {
+            did_know = get_jkl_buttons_value(did_know);
+        }
+    }
+    return did_know;
+}
 
-    printf("\n\n           *** Happy studying! ***");
-    printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
-    printf("\n %-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+void save_and_reload_lessons() {
+    save_lessons();
+    lessons = read_lessons(db_file);
+    printf("\n***info*** save and reload lessons\n");
+}
+
+int main(int argc, char *argv[])
+
+{
+    cmd = argv[0];
+    init();
+
+    handle_options(argc, argv);
 
     lesson* lessons;
-    lessons = read_lessons("ankidb.txt");
+    lessons = read_lessons(db_file);
+
+    if(!shortwelcome)
+        welcome_help();
+
+    print_header();
 
     int j = 0;
     int finished=0;
 
-    int jkl(int keycode){
-        switch(keycode){
-            case 58: return 1;      //button 'j' => 1
-            case 59: return 2;      //button 'k' => 2
-            case 60: return 3;      //button 'l' => 3
-            default: return keycode;
-        }
-    }
-
     while(finished==0) {
         for(int k=0;k<4;k++,j++){
-            if(j>sizeof(lessons)-2) {
+
+            if(j>lessons_size-1) {
                 j = 0;
-                save_lessons(lessons);
-                lessons = read_lessons("ankidb.txt");
-                printf("\n***info*** save and reload lessons\n");
+                save_and_reload_lessons();
             }
 
-            int did_know=0;
+            // print card_front
             printf("\n %-20s", lessons[j].card_front);
+
+            // wait for card_back
             getch();
             printf("%-20s", lessons[j].card_back);
-            while(did_know<1 || did_know>3) {
-                did_know = getch() - '0';
-                if(did_know>3) {
-                    did_know = jkl(did_know);
-                }
-            }
+
+            // ask for experience
+            int did_know = ask_for_proper_did_know(0);
             printf("(%i)", did_know);
-            printf("%5i+%i", atoi(lessons[j].experience), did_know*did_know);
-            sprintf(lessons[j].experience, "%i", atoi(lessons[j].experience) + did_know*did_know);
+
+            // print experience calculation
+            int old_xp = atoi(lessons[j].experience);
+            int add_xp = did_know*did_know;
+            printf("%5i+%i", old_xp, add_xp);
+
+            // set new experience
+            sprintf(lessons[j].experience, "%i", old_xp + add_xp);
+
+            // print sum experience
             printf("=%4s\n", lessons[j].experience);
         }
 
-        save_lessons(lessons);
+        save_lessons();
 
         printf("\n***continue?***  (n)-no  (any other keys)-yes\n");
         finished = getch() - '0' == 62;
