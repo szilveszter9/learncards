@@ -257,6 +257,26 @@ lesson *read_lessons(char *filename){
     }
 }
 
+void save_lessons(lesson *lessons) {
+    FILE *fpw = fopen("ankidbw.txt", "w");
+    if (fpw == NULL)
+    {
+        fprintf(stderr,"Error opening file.\n");
+        exit(2);
+    }
+    else {
+        for(int line = 0; line < sizeof(lessons); line++){
+            fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
+            //printf("%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
+        }
+        fclose(fpw);
+    }
+
+    //TODO check new filesize, should not be smaller than the previous
+    if(rename("ankidb.txt","ankidb.bak")==0)
+        rename("ankidbw.txt","ankidb.txt");
+}
+
 int main(int argc, char *argv[])
 
 {
@@ -278,8 +298,8 @@ int main(int argc, char *argv[])
         welcome_help(argv[0]);
 
     printf("\n\n           *** Happy studying! ***");
-    printf("\n\n%-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
-    printf("\n%-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+    printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
+    printf("\n %-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
 
     int lines_allocated = 128;
 
@@ -303,6 +323,7 @@ int main(int argc, char *argv[])
             case 58: return 1;      //button 'j' => 1
             case 59: return 2;      //button 'k' => 2
             case 60: return 3;      //button 'l' => 3
+            default: return keycode;
         }
     }
 
@@ -310,11 +331,13 @@ int main(int argc, char *argv[])
         for(int k=0;k<4;k++,j++){
             if(j>sizeof(lessons)-2) {
                 j = 0;
+                save_lessons(lessons);
                 lessons = read_lessons("ankidb.txt");
+                printf("\n***info*** save and reload lessons\n");
             }
 
             int did_know=0;
-            printf("\n%-20s", lessons[j].card_front);
+            printf("\n %-20s", lessons[j].card_front);
             getch();
             printf("%-20s", lessons[j].card_back);
             while(did_know<1 || did_know>3) {
@@ -329,25 +352,9 @@ int main(int argc, char *argv[])
             printf("=%4s\n", lessons[j].experience);
         }
 
-        FILE *fpw = fopen("ankidbw.txt", "w");
-        if (fpw == NULL)
-        {
-            fprintf(stderr,"Error opening file.\n");
-            exit(2);
-        }
-        else {
-            for(int line = 0; line < sizeof(lessons); line++){
-                fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
-                printf("%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
-            }
-            fclose(fpw);
-        }
+        save_lessons(lessons);
 
-        //TODO check new filesize, should not be smaller than the previous
-        if(rename("ankidb.txt","ankidb.bak")==0)
-            rename("ankidbw.txt","ankidb.txt");
-
-        printf("\ncontinue?  (n)-no  (any other keys)-yes\n");
+        printf("\n***continue?***  (n)-no  (any other keys)-yes\n");
         finished = getch() - '0' == 62;
     }
     printf("\n");
