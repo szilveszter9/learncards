@@ -11,6 +11,16 @@
 #include <termios.h>
 #include <stdio.h>
 
+typedef struct lesson_class_struct {
+    char date[19];
+    //char card_front[128];
+    //char card_back[128];
+    char *card_front;
+    char *card_back;
+    char *experience;
+    int seen;
+} lesson;
+
 static struct termios old, new;
 
 /* Initialize new terminal i/o settings */
@@ -136,58 +146,24 @@ char* curtime()
 //    return EXIT_SUCCESS;
 //}
 
-struct lesson {
-    char date[19];
-    //char card_front[128];
-    //char card_back[128];
-    char *card_front;
-    char *card_back;
-    char *experience;
-    int seen;
-};
 
 typedef int (*compfn)(const void*, const void*);
 
 char nextchar;
 int shortwelcome;
 
-int main(int argc, char *argv[])
+int max_line_len = 500000;
 
-{
-    for (int i=1;i<argc;i++) {
-        if(strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
-            printf("\nanki clone in your console");
-            printf("\n\nOptions");
-            printf("\n -h, --help    show help");
-            printf("\n -s, --shortwelcome  short welcome message on start.");
-            printf("\n");
-            return 0;
-        }
-        if(strcmp(argv[i], "-s")==0 || strcmp(argv[i], "--shortwelcome")==0) {
-            shortwelcome = 1;
-        }
-    }
-    int lines_allocated = 128;
-    int max_line_len = 500000;
+lesson *read_lessons(char *filename){
+    lesson *lessons = malloc(max_line_len * sizeof(struct lesson_class_struct));;
 
-    /* Allocate lines of text */
-    char **words = (char **)malloc(sizeof(char*)*lines_allocated);
-    //struct lesson lessons[sizeof(char*)*lines_allocated];
-    struct lesson* lessons = malloc(max_line_len * sizeof(struct lesson));;
-    if (words==NULL)
-    {
-        fprintf(stderr,"Out of memory (1).\n");
-        exit(1);
-    }
-
-    FILE *fp = fopen("ankidb.txt", "r");
+    FILE *fp = fopen(filename, "r");
     if (fp == NULL)
     {
         fprintf(stderr,"Error opening file.\n");
         exit(2);
     }
 
-    int lessons_length;
     for (int i=0;;i++)
     {
         int j;
@@ -244,17 +220,47 @@ int main(int argc, char *argv[])
             else if(column==3) lessons[i].card_back[j] = nextchar;
         }
         if(nextchar==EOF){
-            lessons_length = i;
-            break;
+            /* Close file */
+            fclose(fp);
+            return lessons;
         }
     }
-    /* Close file */
-    fclose(fp);
+}
+
+int main(int argc, char *argv[])
+
+{
+    for (int i=1;i<argc;i++) {
+        if(strcmp(argv[i], "-h")==0 || strcmp(argv[i], "--help")==0) {
+            printf("\nanki clone in your console");
+            printf("\n\nOptions");
+            printf("\n -h, --help    show help");
+            printf("\n -s, --shortwelcome  short welcome message on start.");
+            printf("\n");
+            return 0;
+        }
+        if(strcmp(argv[i], "-s")==0 || strcmp(argv[i], "--shortwelcome")==0) {
+            shortwelcome = 1;
+        }
+    }
+    int lines_allocated = 128;
+
+    /* Allocate lines of text */
+    char **words = (char **)malloc(sizeof(char*)*lines_allocated);
+    //struct lesson lessons[sizeof(char*)*lines_allocated];
+    if (words==NULL)
+    {
+        fprintf(stderr,"Out of memory (1).\n");
+        exit(1);
+    }
+
+    lesson* lessons = read_lessons("ankidb.txt");
+    int lessons_length = sizeof(lessons);
 
     //for(int j = 0; j < i; j++)
     //    printf("date: %s, experience: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front, lessons[j].card_back);
 
-    int compare(struct lesson *elem1, struct lesson *elem2)
+    int compare(lesson *elem1, lesson *elem2)
     {
         if (atoi(elem1->experience) < atoi(elem2->experience))
             return -1;
@@ -268,7 +274,7 @@ int main(int argc, char *argv[])
 
     qsort(lessons,
             lessons_length,
-            sizeof(struct lesson),
+            sizeof(lesson),
             (compfn)compare
          );
 
