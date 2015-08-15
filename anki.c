@@ -11,6 +11,23 @@
 #include <termios.h>
 #include <stdio.h>
 
+void welcome_help(char *cmd){
+    printf("\n Help");
+    printf("\n 1) Press any key to show the solution.");
+    printf("\n 2) Use the (j), (k), and (l) buttons in order to add some points to your experience.");
+    printf("\n        key    extra points");
+    printf("\n        ~~~    ~~~~~~~~~~~~");
+    printf("\n        (j)        +1");
+    printf("\n        (k)        +4");
+    printf("\n        (l)        +9");
+    printf("\n 3) After every 4 cards you will be asked whether to continue.");
+    printf("\n        Meanwhile an automated save happens.");
+    printf("\n        (n) will stop the study and quit, hope to see you soon.");
+    printf("\n        any other keys will keep going, have fun with another 4 cards.");
+    printf("\n Run %s -h for more help", cmd);
+    printf("\n You can press Ctrl-c any time to quit without any changes to your scores.");
+}
+
 typedef struct lesson_class_struct {
     char date[19];
     //char card_front[128];
@@ -154,6 +171,18 @@ int shortwelcome;
 
 int max_line_len = 500000;
 
+int compare(lesson *elem1, lesson *elem2)
+{
+    if (atoi(elem1->experience) < atoi(elem2->experience))
+        return -1;
+
+    else if (atoi(elem1->experience) > atoi(elem2->experience))
+        return 1;
+
+    else
+        return 0;
+}
+
 lesson *read_lessons(char *filename){
     lesson *lessons = malloc(max_line_len * sizeof(struct lesson_class_struct));;
 
@@ -222,6 +251,7 @@ lesson *read_lessons(char *filename){
         if(nextchar==EOF){
             /* Close file */
             fclose(fp);
+            qsort(lessons, sizeof(lessons), sizeof(lesson), (compfn)compare);
             return lessons;
         }
     }
@@ -243,6 +273,14 @@ int main(int argc, char *argv[])
             shortwelcome = 1;
         }
     }
+
+    if(!shortwelcome)
+        welcome_help(argv[0]);
+
+    printf("\n\n           *** Happy studying! ***");
+    printf("\n\n%-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
+    printf("\n%-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+
     int lines_allocated = 128;
 
     /* Allocate lines of text */
@@ -254,54 +292,27 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    lesson* lessons = read_lessons("ankidb.txt");
-    int lessons_length = sizeof(lessons);
-
-    //for(int j = 0; j < i; j++)
-    //    printf("date: %s, experience: %i, front: %s ----- back: %s\n", lessons[j].date, atoi(lessons[j].experience), lessons[j].card_front, lessons[j].card_back);
-
-    int compare(lesson *elem1, lesson *elem2)
-    {
-        if (atoi(elem1->experience) < atoi(elem2->experience))
-            return -1;
-
-        else if (atoi(elem1->experience) > atoi(elem2->experience))
-            return 1;
-
-        else
-            return 0;
-    }
-
-    qsort(lessons,
-            lessons_length,
-            sizeof(lesson),
-            (compfn)compare
-         );
-
-    int finished=0;
-    if(!shortwelcome) {
-        printf("\n Help");
-        printf("\n 1) Press any key to show the solution.");
-        printf("\n 2) Use the (j), (k), and (l) buttons in order to add some points to your experience.");
-        printf("\n        key    extra points");
-        printf("\n        ~~~    ~~~~~~~~~~~~");
-        printf("\n        (j)        +1");
-        printf("\n        (k)        +4");
-        printf("\n        (l)        +9");
-        printf("\n 3) After every 4 cards you will be asked whether to continue.");
-        printf("\n        Meanwhile an automated save happens.");
-        printf("\n        (n) will stop the study and quit, hope to see you soon.");
-        printf("\n        any other keys will keep going, have fun with another 4 cards.");
-        printf("\n Run %s -h for more help", argv[0]);
-        printf("\n You can press Ctrl-c any time to quit without any changes to your scores.");
-    }
-    printf("\n\n           *** Happy studying! ***");
-    printf("\n\n%-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
-    printf("\n%-20s%-20s%-5s%-20s", "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+    lesson* lessons;
+    lessons = read_lessons("ankidb.txt");
 
     int j = 0;
+    int finished=0;
+
+    int jkl(int keycode){
+        switch(keycode){
+            case 58: return 1;      //button 'j' => 1
+            case 59: return 2;      //button 'k' => 2
+            case 60: return 3;      //button 'l' => 3
+        }
+    }
+
     while(finished==0) {
         for(int k=0;k<4;k++,j++){
+            if(j>sizeof(lessons)-2) {
+                j = 0;
+                lessons = read_lessons("ankidb.txt");
+            }
+
             int did_know=0;
             printf("\n%-20s", lessons[j].card_front);
             getch();
@@ -309,12 +320,10 @@ int main(int argc, char *argv[])
             while(did_know<1 || did_know>3) {
                 did_know = getch() - '0';
                 if(did_know>3) {
-                    if(did_know==58) did_know=1;//button 'j' => 1
-                    if(did_know==59) did_know=2;//button 'k' => 2
-                    if(did_know==60) did_know=3;//button 'l' => 3
+                    did_know = jkl(did_know);
                 }
-                printf("(%i)", did_know);
             }
+            printf("(%i)", did_know);
             printf("%5i+%i", atoi(lessons[j].experience), did_know*did_know);
             sprintf(lessons[j].experience, "%i", atoi(lessons[j].experience) + did_know*did_know);
             printf("=%4s\n", lessons[j].experience);
@@ -327,7 +336,7 @@ int main(int argc, char *argv[])
             exit(2);
         }
         else {
-            for(int line = 0; line < lessons_length; line++){
+            for(int line = 0; line < sizeof(lessons); line++){
                 fprintf(fpw, "%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
                 printf("%s;%i;%s;%s\n", lessons[line].date, atoi(lessons[line].experience), lessons[line].card_front, lessons[line].card_back);
             }
