@@ -326,10 +326,14 @@ int main(int argc, char *argv[])
 
             // print card_front
             printf("\n %-20s", lessons[c_line].card_front);
+            if(strlen(lessons[c_line].card_front)>19)
+                printf("\n %-20s", " ");
 
             // wait for card_back
             getch();
             printf("%-20s", lessons[c_line].card_back);
+            if(strlen(lessons[c_line].card_back)>19)
+                printf("\n %-40s", " ");
 
             // ask for experience
             int did_know = ask_for_proper_did_know(0);
