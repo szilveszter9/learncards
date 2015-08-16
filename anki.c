@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <termios.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
@@ -11,6 +13,7 @@
 char *db_file_name;
 char *db_tempfile_name;
 char *db_backup_file_name;
+char *db_conflict_file_name;
 int lessons_size = 0;
 char nextchar;
 int shortwelcome;
@@ -33,6 +36,7 @@ void init() {
     db_file_name = "ankidb.txt";
     db_tempfile_name = "ankidbw.txt";
     db_backup_file_name = "ankidb.bak";
+    db_conflict_file_name = "ankidbc.txt";
 }
 
 void print_help() {
@@ -49,17 +53,17 @@ void welcome_help() {
     printf("\n Help"
            "\n 1) Press any key to show the solution."
            "\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience."
-           "\n        key    extra points"
-           "\n        ~~~    ~~~~~~~~~~~~"
-           "\n        <j>         +1"
-           "\n        <k>         +4"
-           "\n        <l>         +9"
+           "\n        key    extra points                  you"
+           "\n        ~~~    ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+           "\n        <j>         +1         * were wrong or had no guess at all"
+           "\n        <k>         +4         * had to think about that"
+           "\n        <l>         +9         * knew it without any delay"
            "\n"
            "\n 3) After every 4 cards you will be asked whether to continue.*"
-           "\n        key          behaviour"
-           "\n        ~~~          ~~~~~~~~~"
-           "\n        <n>          will stop the study and quit, hope to see you soon."
-           "\n        any other    will keep going, have fun with another 4 cards."
+           "\n        key                         behaviour"
+           "\n     ~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+           "\n        <n>       will stop the study and quit, hope to see you soon."
+           "\n     any other    will keep going, have fun with another 4 cards."
            "\n"
            "\n    *Meanwhile an automated save happens."
            "\n"
@@ -82,12 +86,12 @@ void create_new_db_file() {
         FILE *fpw = fopen(db_file_name, "w");
         fprintf(fpw, "2015-08-13 07:07:25;0;penalty;buntetes\n");
         fprintf(fpw, "2015-08-13 07:07:25;0;drivetrain;hajtomu\n");
-        printf("***info*** %s has been created.\n", db_file_name);
+        printf("\n***info*** %s has been created.\n", db_file_name);
         fclose(fpw);
     }
     else {
         fclose(fp);
-        fprintf(stderr,"***error*** %s already exists.\n", db_file_name);
+        fprintf(stderr,"\n***error*** %s already exists.\n", db_file_name);
     }
 }
 
@@ -196,7 +200,32 @@ lesson *load_lessons() {
     }
 }
 
-void save_lessons() {
+off_t fsize(const char *filename) {
+    struct stat st;
+
+    if (stat(filename, &st) == 0)
+        return st.st_size;
+
+    fprintf(stderr, "Cannot determine size of %s: %s\n",
+            filename, strerror(errno));
+
+    return -1;
+}
+
+void on_save_size_conflict() {
+    rename(db_tempfile_name, db_conflict_file_name);
+    printf("\n***MUST READ*** Make sure to create some backups of your database %s before continue!", db_file_name);
+    printf("\n                Now you can press Ctrl-c safely and read the following instructions.");
+    printf("\n***error*** Save failed due to the new database file would be smaller than the original."
+            "\n            Possibly the original file has been modified by another application"
+            "\n            or you are running more anki for the same database file in parallel.");
+    printf("\n***info***  For your safety your current changes have been saved to %s conflict file", db_conflict_file_name);
+    printf("\n            while the original database file %s has been kept intact for now,", db_file_name);
+    printf("\n            though it could be still overwritten if you keep continue and reach the last card,"
+            "\n            since there is a database reload that case.");
+}
+
+int save_lessons() {
     FILE *fpw = fopen(db_tempfile_name, "w");
     if(fpw == NULL)
     {
@@ -210,9 +239,14 @@ void save_lessons() {
         fclose(fpw);
     }
 
-    //TODO check new filesize, should not be smaller than the previous
+    if(fsize(db_file_name) > fsize(db_tempfile_name)) {
+        on_save_size_conflict();
+        return -1;
+    }
+
     if(rename(db_file_name, db_backup_file_name) == 0)
         rename(db_tempfile_name, db_file_name);
+    return 0;
 }
 
 int ask_for_proper_did_know() {
@@ -360,7 +394,7 @@ int main(int argc, char *argv[])
 
         save_lessons();
 
-        printf("\n***continue?***  (n)-no  (any other keys)-yes\n");
+        printf("\n***continue?***  <n>-no  (any other keys)-yes\n");
         finished = getch() - '0' == 62;
     }
     printf("\n");
