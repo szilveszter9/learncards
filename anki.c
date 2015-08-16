@@ -85,7 +85,6 @@ void print_header() {
 }
 
 void write_sandbox(FILE *fpw) {
-    printf("wwwwww");
     fprintf(fpw, "2015-08-13 07:07:25;0;Please press any key to show the solution...;here you can see the solution, now press button <j>...\n");
     fprintf(fpw, "2015-08-13 07:07:25;0;If you were wrong or had no clue...;press button <j> or <1>\n");
     fprintf(fpw, "2015-08-13 07:07:25;0;If you had to think about...;press button <k> or <2>\n");
