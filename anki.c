@@ -4,19 +4,19 @@
 #include <termios.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <unistd.h>
 
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
 #endif
 #include <time.h>
 
-char *db_file_name;
-char *db_tempfile_name;
-char *db_backup_file_name;
-char *db_conflict_file_name;
+char db_file_name[29];
+char db_tempfile_name[30];
+char db_backup_file_name[29];
+char db_conflict_file_name[30];
 int lessons_size = 0;
 char nextchar;
-int shortwelcome;
 int max_line_len = 50000;
 char *cmd;
 
@@ -32,32 +32,39 @@ lesson *lessons;
 
 static struct termios old, new;
 
+void setup_filenames(char *filebase) {
+    char f[23]="", t[23]="", b[23]="", c[23]="";
+    strcpy(db_file_name,          strcat(strcat(f, filebase), "_db.txt" ));
+    strcpy(db_tempfile_name,      strcat(strcat(t, filebase), "_dbw.txt"));
+    strcpy(db_backup_file_name,   strcat(strcat(b, filebase), "_db.bak" ));
+    strcpy(db_conflict_file_name, strcat(strcat(c, filebase), "_dbc.txt"));
+}
+
 void init() {
-    db_file_name = "ankidb.txt";
-    db_tempfile_name = "ankidbw.txt";
-    db_backup_file_name = "ankidb.bak";
-    db_conflict_file_name = "ankidbc.txt";
+    setup_filenames("anki");
 }
 
 void print_help() {
     printf("\nanki clone in your console"
             "\n\nOptions"
             "\n h, -h, --help              show help"
-            "\n s, -s, --shortwelcome      short welcome message on start"
-            "\n i, -i, --init-template     create initial template file if does not exist yet"
+            "\n i, -i, --init [db name]    create initial database file if does not exist yet"
             "\n a, -a, --add               add new cards"
-            "\n");
+            "\n a, -a, --add               add new cards"
+            "\n\nExamples");
+    printf("\n %s i my_new_cards  -  will create a new empty database if does not exists yet", cmd);
+    printf("\n\n");
 }
 
-void welcome_help() {
-    printf("\n Help"
+void welcome_help_detailed() {
+    printf("\n\n Help"
             "\n 1) Press any key to show the solution."
-            "\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience."
-            "\n        key    extra points                  you"
-            "\n        ~~~    ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-            "\n        <j>         +1         * were wrong or had no guess at all"
-            "\n        <k>         +4         * had to think about that"
-            "\n        <l>         +9         * knew it without any delay"
+            "\n 2) Use the <1><2><3> or <j><k><l> buttons in order to gain some points."
+            "\n         key      extra points                  you *"
+            "\n     ~~~~~~~~~~   ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            "\n     <1> or <j>        +1         * were wrong or had no clue"
+            "\n     <2> or <k>        +4         * were right but had to think about that"
+            "\n     <3> or <l>        +9         * knew it perfectly without any delay"
             "\n"
             "\n 3) After every 4 cards you will be asked whether to continue.*"
             "\n        key                         behaviour"
@@ -69,29 +76,43 @@ void welcome_help() {
             "\n"
             "\n");
     printf("\n Run %s -h for more help", cmd);
-    printf("\n You can use Ctrl-c any time to quit without any changes to your scores."
-            "\n"
-            "\n");
+    printf("\n\n You can use Ctrl-c any time to quit without any changes to your scores.\n\n");
 }
 
 void print_header() {
-    printf("\n\n*********************** Happy studying! ********************");
     printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
     printf("\n %-20s%-20s%-5s%-20s",   "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
 }
 
-void create_new_db_file() {
+void write_sandbox(FILE *fpw) {
+    printf("wwwwww");
+    fprintf(fpw, "2015-08-13 07:07:25;0;Please press any key to show the solution...;here you can see the solution, now press button <j>...\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;If you were wrong or had no clue...;press button <j> or <1>\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;If you had to think about...;press button <k> or <2>\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;If you knew it straight away...;press button <l> or <3>\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;You can add new cards...;just run %s -a\n", cmd);
+    fprintf(fpw, "2015-08-13 07:07:25;0;Now you can press ctrl-c and create some cards...;just run %s -a\n", cmd);
+    fprintf(fpw, "2015-08-13 07:07:25;0;Or You can add even add cards...;by editing %s directly\n", db_file_name);
+    fprintf(fpw, "2015-08-13 07:07:25;0;By editing %s mind the semicolon...;between your question and answer\n", db_file_name);
+    fprintf(fpw, "2015-08-13 07:07:25;0;Each line in %s is a card...;and has four parts.\n", db_file_name);
+    fprintf(fpw, "2015-08-13 07:07:25;0;1) Date in the given format like...;2099-08-13 07:07:25\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;2) Experiment score is...;a number\n");
+    fprintf(fpw, "2015-08-13 07:07:25;0;3) Question and answer are...;strings\n");
+}
+
+void create_new_db_file(int sandbox) {
     FILE *fp = fopen(db_file_name, "r");
     if(fp == NULL) {
         FILE *fpw = fopen(db_file_name, "w");
-        fprintf(fpw, "2015-08-13 07:07:25;0;penalty;buntetes\n");
-        fprintf(fpw, "2015-08-13 07:07:25;0;drivetrain;hajtomu\n");
-        printf("\n***info*** %s has been created.\n", db_file_name);
+        if(sandbox == 1)
+            write_sandbox(fpw);
+        printf("\n***info*** New database text file %s has just been created\n\n", db_file_name);
         fclose(fpw);
     }
     else {
         fclose(fp);
-        fprintf(stderr,"\n***error*** %s already exists.\n", db_file_name);
+        fprintf(stderr,"\n***error*** %s already exists.\n\n", db_file_name);
+        exit(2);
     }
 }
 
@@ -163,9 +184,8 @@ lesson *load_lessons() {
     FILE *fp = fopen(db_file_name, "r");
     if(fp == NULL)
     {
-        fprintf(stderr,"Could not find the default database text file.\n");
-        fprintf(stderr,"You can create a template with %s --init-template\n", cmd);
-        exit(2);
+        create_new_db_file(1);
+        fp = fopen(db_file_name, "r");
     }
 
     for(int c_line = 0;; c_line++)
@@ -229,7 +249,7 @@ int save_lessons() {
     FILE *fpw = fopen(db_tempfile_name, "w");
     if(fpw == NULL)
     {
-        fprintf(stderr,"Error opening file.\n");
+        fprintf(stderr,"Error opening file.\n\n");
         exit(2);
     }
     else {
@@ -323,6 +343,16 @@ void create_new_card(){
     lessons_size++;
 }
 
+void create_new_cards() {
+    printf("\n Now you can add some new cards.\n\n");
+    printf("\n Press Ctrl-c to stop.\n\n");
+    load_lessons();
+    while(1) {
+        create_new_card();
+        save_lessons();
+    }
+}
+
 void handle_cli_options(int argc, char *argv[]) {
     for(int c_arg_idx = 1; c_arg_idx<argc; c_arg_idx++) {
         int _is(char *str) {
@@ -338,22 +368,45 @@ void handle_cli_options(int argc, char *argv[]) {
             print_help();
             exit(0);
         }
-        if(is("i") || is("init-template")) {
-            create_new_db_file();
+        else if(is("i") || is("init")) {
+            if(argv[c_arg_idx + 1]) {
+                setup_filenames(argv[c_arg_idx + 1]);
+                create_new_db_file(0);
+                create_new_cards();
+            }
+            else {
+                create_new_db_file(1);
+            }
             exit(0);
         }
-        if(is("a") || is("add")) {
-            printf("\n Press Ctrl-c to stop.\n\n");
-            load_lessons();
-            while(1) {
-                create_new_card();
-                save_lessons();
+        else if(is("a") || is("add")) {
+            if(argv[c_arg_idx + 1]) {
+                setup_filenames(argv[c_arg_idx + 1]);
+                printf("\n***info*** loading %s database...\n\n", argv[c_arg_idx + 1]);
+            }
+            create_new_cards();
+        }
+        else{
+            char f[23]="";
+            char filename[29] = "";
+            strcpy(filename, strcat(strcat(f, argv[c_arg_idx]), "_db.txt" ));
+            if(access(filename, W_OK) == 0) {
+                setup_filenames(argv[c_arg_idx]);
+                printf("\n***info*** loading %s database...\n\n", argv[c_arg_idx]);
+            }
+            else {
+                printf("\n there is no such options or database in the current directory\n\n");
+                exit(1);
             }
         }
-        if(is("s") || is("shortwelcome")) {
-            shortwelcome = 1;
-        }
     }
+}
+
+void welcome_help() {
+    printf("\n\n ******************** Happy studying! ********************");
+    printf("\n\n Press any key to continue, h for help, or Ctrl-c to quit.");
+    if(getch() - '0' == 56)
+        welcome_help_detailed();
 }
 
 int main(int argc, char *argv[])
@@ -363,11 +416,11 @@ int main(int argc, char *argv[])
     init();
 
     handle_cli_options(argc, argv);
+    printf("loading lessons...");
 
     load_lessons();
 
-    if(!shortwelcome)
-        welcome_help();
+    welcome_help();
 
     print_header();
 
@@ -377,7 +430,7 @@ int main(int argc, char *argv[])
     while(finished == 0) {
         for(int c_quiz = 0; c_quiz<4; c_quiz++, c_line++) {
 
-            // reload if out of lessons
+            // reload if ran out of lessons
             if(c_line>lessons_size-1) {
                 c_line = 0;
                 save_and_reload_lessons();
