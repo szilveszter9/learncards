@@ -280,8 +280,7 @@ void create_new_card(){
             break;
         }
         else {
-            free(card_front);
-            card_front = malloc(128);
+            sprintf(card_front, "\n");
             printf("        try again: ");
         }
     }
@@ -294,8 +293,7 @@ void create_new_card(){
             break;
         }
         else {
-            free(card_back);
-            card_back = malloc(128);
+            sprintf(card_front, "\n");
             printf("        try again: ");
         }
     }
