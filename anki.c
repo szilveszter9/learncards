@@ -272,15 +272,35 @@ void create_new_card(){
     char *experience = malloc(32);
 
     // ask for user input
-    printf("\n enter card front:");
-    fgets(card_front, 128, stdin);
-    strtok(card_front, "\n");
+    printf("\n enter card front: ");
+    while(1) {
+        fgets(card_front, 128, stdin);
+        if(strlen(card_front) > 1) {
+            strtok(card_front, "\n");
+            break;
+        }
+        else {
+            free(card_front);
+            card_front = malloc(128);
+            printf("        try again: ");
+        }
+    }
 
-    printf(" enter card back:");
-    fgets(card_back, 128, stdin);
-    strtok(card_back, "\n");
+    printf(" enter card back:  ");
+    while(1) {
+        fgets(card_back, 128, stdin);
+        if(strlen(card_back) > 1) {
+            strtok(card_back, "\n");
+            break;
+        }
+        else {
+            free(card_back);
+            card_back = malloc(128);
+            printf("        try again: ");
+        }
+    }
 
-    printf(" enter experience:");
+    printf(" enter experience (0 by default): ");
     fgets(experience, 32, stdin);
     strtok(experience, "\n");
 
@@ -325,7 +345,7 @@ void handle_cli_options(int argc, char *argv[]) {
             exit(0);
         }
         if(is("a") || is("add")) {
-            printf("\n Press Ctrl-c to stop.");
+            printf("\n Press Ctrl-c to stop.\n\n");
             load_lessons();
             while(1) {
                 create_new_card();
