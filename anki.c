@@ -41,37 +41,37 @@ void init() {
 
 void print_help() {
     printf("\nanki clone in your console"
-           "\n\nOptions"
-           "\n h, -h, --help              show help"
-           "\n s, -s, --shortwelcome      short welcome message on start"
-           "\n i, -i, --init-template     create initial template file if does not exist yet"
-           "\n a, -a, --add               add new cards"
-           "\n");
+            "\n\nOptions"
+            "\n h, -h, --help              show help"
+            "\n s, -s, --shortwelcome      short welcome message on start"
+            "\n i, -i, --init-template     create initial template file if does not exist yet"
+            "\n a, -a, --add               add new cards"
+            "\n");
 }
 
 void welcome_help() {
     printf("\n Help"
-           "\n 1) Press any key to show the solution."
-           "\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience."
-           "\n        key    extra points                  you"
-           "\n        ~~~    ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-           "\n        <j>         +1         * were wrong or had no guess at all"
-           "\n        <k>         +4         * had to think about that"
-           "\n        <l>         +9         * knew it without any delay"
-           "\n"
-           "\n 3) After every 4 cards you will be asked whether to continue.*"
-           "\n        key                         behaviour"
-           "\n     ~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-           "\n        <n>       will stop the study and quit, hope to see you soon."
-           "\n     any other    will keep going, have fun with another 4 cards."
-           "\n"
-           "\n    *Meanwhile an automated save happens."
-           "\n"
-           "\n");
+            "\n 1) Press any key to show the solution."
+            "\n 2) Use the <j>, <k>, and <l> buttons in order to add some points to your experience."
+            "\n        key    extra points                  you"
+            "\n        ~~~    ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            "\n        <j>         +1         * were wrong or had no guess at all"
+            "\n        <k>         +4         * had to think about that"
+            "\n        <l>         +9         * knew it without any delay"
+            "\n"
+            "\n 3) After every 4 cards you will be asked whether to continue.*"
+            "\n        key                         behaviour"
+            "\n     ~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            "\n        <n>       will stop the study and quit, hope to see you soon."
+            "\n     any other    will keep going, have fun with another 4 cards."
+            "\n"
+            "\n    *Meanwhile an automated save happens."
+            "\n"
+            "\n");
     printf("\n Run %s -h for more help", cmd);
     printf("\n You can use Ctrl-c any time to quit without any changes to your scores."
-           "\n"
-           "\n");
+            "\n"
+            "\n");
 }
 
 void print_header() {
@@ -98,39 +98,39 @@ void create_new_db_file() {
 /* Initialize new terminal i/o settings */
 void initTermios(int echo)
 {
-  tcgetattr(0, &old); /* grab old terminal i/o settings */
-  new = old; /* make new settings same as old settings */
-  new.c_lflag &= ~ICANON; /* disable buffered i/o */
-  new.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
-  tcsetattr(0, TCSANOW, &new); /* use these new terminal i/o settings now */
+    tcgetattr(0, &old); /* grab old terminal i/o settings */
+    new = old; /* make new settings same as old settings */
+    new.c_lflag &= ~ICANON; /* disable buffered i/o */
+    new.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
+    tcsetattr(0, TCSANOW, &new); /* use these new terminal i/o settings now */
 }
 
 /* Restore old terminal i/o settings */
 void resetTermios(void)
 {
-  tcsetattr(0, TCSANOW, &old);
+    tcsetattr(0, TCSANOW, &old);
 }
 
 /* Read 1 character - echo defines echo mode */
 char getch_(int echo)
 {
-  char ch;
-  initTermios(echo);
-  ch = getchar();
-  resetTermios();
-  return ch;
+    char ch;
+    initTermios(echo);
+    ch = getchar();
+    resetTermios();
+    return ch;
 }
 
 /* Read 1 character without echo */
 char getch(void)
 {
-  return getch_(0);
+    return getch_(0);
 }
 
 /* Read 1 character with echo */
 char getche(void)
 {
-  return getch_(1);
+    return getch_(1);
 }
 
 int get_jkl_buttons_value(int keycode) {
