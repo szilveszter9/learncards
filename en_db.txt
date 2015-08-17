@@ -1,3 +1,6 @@
+;;... to you (in radio);..., vissza hozzad (radioban)
+;;crank-arm;forgattyukar
+;;quote on quote;idezojelben (ironikusan)
 ;;simplify;leegyszerusit, egyszerubbe tesz, megkonnyit, konnyen erthetove tesz
 ;;reduction;kisebbites, kicsinyites, csokkentes
 ;;myriad;miriad, szamtalan
