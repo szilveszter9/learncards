@@ -1,12 +1,12 @@
-2015-08-13 07:07:25;1;Please press any key to show the solution...;here you can see the solution, now press button <j>...
-2015-08-13 07:07:25;1;If you were wrong or had no clue...;press button <j> or <1>
-2015-08-13 07:07:25;1;If you had to think about...;press button <k> or <2>
-2015-08-13 07:07:25;1;If you knew it straight away...;press button <l> or <3>
-2015-08-13 07:07:25;0;You can add new cards...;just run ./anki -a
-2015-08-13 07:07:25;0;Now you can press ctrl-c and create some cards...;just run ./anki -a
-2015-08-13 07:07:25;0;Or You can add even add cards...;by editing anki_db.txt directly
-2015-08-13 07:07:25;0;By editing anki_db.txt mind the semicolon...;between your question and answer
-2015-08-13 07:07:25;0;Each line in anki_db.txt is a card...;and has four parts.
-2015-08-13 07:07:25;0;1) Date in the given format like...;2099-08-13 07:07:25
-2015-08-13 07:07:25;0;2) Experiment score is...;a number
-2015-08-13 07:07:25;0;3) Question and answer are...;strings
+;;Please press any key to show the solution...;here you can see the solution, now press button <j>...
+;;If you were wrong or had no clue...;press button <j> or <1>
+;;If you had to think about...;press button <k> or <2>
+;;If you knew it straight away...;press button <l> or <3>
+;;You can add new cards...;just run ./anki -a
+;;Now you can press ctrl-c and create some cards...;just run ./anki -a
+;;Or You can add even add cards...;by editing anki_db.txt directly
+;;By editing anki_db.txt mind the semicolon...;between your question and answer
+;;Each line in anki_db.txt is a card...;and has four parts.
+;;1) Date in the given format like...;2099-08-13 07:07:25
+;;2) Experiment score is...;a number
+;;3) Question and answer are...;strings

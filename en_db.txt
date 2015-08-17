@@ -1,31 +1,87 @@
-2015-08-16 22:06:22;0;ramification;agazat, elhajlas, elagazas
-2015-08-16 22:07:18;0;firmly;szilardan, erosen, hatarozottan
-2015-08-16 22:07:53;0;scatter;szor, szorodas
-2015-08-16 22:08:04;0;salvage;megmentes, hajomentes
-2015-08-16 22:09:40;0;debris ('deibri:);roncs, roncshalmaz, (ko)tormelek, hulladek
-2015-08-16 22:11:15;0;velocity;sebesseg, gyorsasag
-2015-08-16 22:11:24;0;habitable;lakhato
-2015-08-16 22:13:09;0;be in charge;iranyit
-2015-08-16 22:13:16;0;charge;teher, rakomany
-2015-08-16 22:13:39;0;faint;gyenge, erotlen, bagyadt, lankadt
-2015-08-16 22:13:51;0;revenge;bosszuallas
-2015-08-16 22:14:17;0;defy;szembeszall, dacol, visszautasit
-2015-08-16 22:14:37;0;demanding;igenyes, sokat kovetelo, nagy igenyeket tamaszto
-2015-08-16 22:15:12;0;stunning;elkabito, nyomaszto, lesujto, megdobbento
-2015-08-16 22:15:34;0;detention;feltartoztatas, kesleltetes, fogvatartas
-2015-08-16 22:16:43;0;prolong;meghosszabbit (vonalat, eletet, latogatast), elnyujt, elhuz (beszelgetest)
-2015-08-16 22:17:46;0;precede;megeloz (vkit, vmit), elotte jar/van/all/halad (vknek, vmnek)
-2015-08-16 22:18:07;0;reduction;kisebbites, kicsinyites, csokkentes
-2015-08-16 22:18:59;0;simplify;leegyszerusit, egyszerubbe tesz, megkonnyit, konnyen erthetove tesz
-2015-08-16 22:19:10;0;myriad;miriad, szamtalan
-2015-08-16 22:19:37;0;mandate;utasitas, rendelkezes, meghagyas
-2015-08-16 22:19:47;0;intact;sertetlen, ep
-2015-08-16 22:19:57;0;parallel;parhuzamos
-2015-08-16 22:20:27;0;authenticity;hitelesseg, ervenyesseg
-2015-08-16 22:21:05;0;conversion;atteres, megteres (vallasra), atallas, atlepes (politikai parthoz)
-2015-08-16 22:21:24;0;conduct;vezetes, intezes, igazgatas
-2015-08-16 22:22:19;0;advocate;tamogato, vedo, partolo
-2015-08-16 22:22:38;0;tackling;megragadas, megmarkolas
-2015-08-16 22:23:26;0;compelling;kenyszerito (ero), ellenalhatatlan (kivansag), parancsolo, keszteto, surgeto (szukseg)
-2015-08-16 22:23:51;0;offer;ajanlat, kinalat
-2015-08-16 22:24:23;0;initiative;kezdo, kezdeti, kezdemenyezes
+;;simplify;leegyszerusit, egyszerubbe tesz, megkonnyit, konnyen erthetove tesz
+;;reduction;kisebbites, kicsinyites, csokkentes
+;;myriad;miriad, szamtalan
+;;mandate;utasitas, rendelkezes, meghagyas
+;;intact;sertetlen, ep
+;;parallel;parhuzamos
+;;authenticity;hitelesseg, ervenyesseg
+;;conversion;atteres, megteres (vallasra), atallas, atlepes (politikai parthoz)
+;;conduct;vezetes, intezes, igazgatas
+;;advocate;tamogato, vedo, partolo
+;;tackling;megragadas, megmarkolas
+;;compelling;kenyszerito (ero), ellenalhatatlan (kivansag), parancsolo, keszteto, surgeto (szukseg)
+;;offer;ajanlat, kinalat
+;;initiative;kezdo, kezdeti, kezdemenyezes
+;;which is far preferable to something; ami sokkal elonyosebb mint valami
+;;rank-arm;forgattyukar
+;;cog;fogaskerek
+;;spoke;kullo
+;;rim;abroncs
+;;clamp;kapocs,fogo,saru,satu
+;;protrude;kiall,eloreall
+;;suspension;felfuggesztes
+;;valve stem;szelep szar
+;;stem;sza'r
+;;drivetrain;hajtomu
+;;penalty;buntetes
+;;acquisition;(meg)szerzes, vagyongyujtes
+;;brake/shift lever;fek-/valtokar
+;;indulgent;elnezo, engedekeny
+;;rinse;oblites, oblogetes
+;;contaminant; szennyezes, fertozes
+;;lingerie;fehernemu
+;;hosiery;harisnya
+;;assail;megtamad
+;;chase, pester;abajgat
+;;coil;tekercs, koteg, kotel, drotkotel, huzal
+;;coils of hair;hajfonat
+;;collusion;osszejatszas, csalas
+;;confess, admit, come clean about, own up to, fess up to;bevall
+;;consent, assent, approval;beleegyezes
+;;cycle;biciklizik
+;;direct to;atiranyit
+;;impaired;elront, megrongal, meggyengit
+;;intercede;kozbenjar
+;;intercessor;kozbenjaro
+;;make a full admission/confession;mindent bevall
+;;mine, quarry;banya
+;;overlap, lap, superimposition;atfedes
+;;passage;atkeles, athaladas, atjaras
+;;possess;birtokolja
+;;rebuke;rendreutasitas
+;;redeploy;atiranyit kat. eroket
+;;redistribute;atiranyit keszleteket (ujraeloszt)
+;;squeeze;osszenyomas, osszeszoritas, osszepreseles
+;;yawn;asit
+;;zig-zag;cikk-cakk
+;;dart in a zigzag line;cikazik
+;;flit;cikazik (madar)
+;;marvelous, miraculous;csodalatos
+;;pot, utensil, tableware, dish;edeny
+;;starving;ehes
+;;lose;elveszit
+;;loose;laza
+;;remember, recollect, call to mind, recall;emlekezni
+;;even then, just then, at that very moment;eppen akkor
+;;for that very reason, that's all the more reason (for);eppen azert
+;;stud;kapcsolo, dugo, erintkezo
+;;interface;erintkezo felulet
+;;spot;eszrevesz
+;;tweezers (s!);csipesz
+;;velocity;sebesseg, gyorsasag
+;;defy;szembeszall, dacol, visszautasit
+;;demanding;igenyes, sokat kovetelo, nagy igenyeket tamaszto
+;;detention;feltartoztatas, kesleltetes, fogvatartas
+;;ramification;agazat, elhajlas, elagazas
+;;salvage;megmentes, hajomentes
+;;be in charge;iranyit
+;;faint;gyenge, erotlen, bagyadt, lankadt
+;;stunning;elkabito, nyomaszto, lesujto, megdobbento
+;;prolong;meghosszabbit (vonalat, eletet, latogatast), elnyujt, elhuz (beszelgetest)
+;;precede;megeloz (vkit, vmit), elotte jar/van/all/halad (vknek, vmnek)
+;;habitable;lakhato
+;;charge;teher, rakomany
+;;revenge;bosszuallas
+;;firmly;szilardan, erosen, hatarozottan
+;;scatter;szor, szorodas
+;;debris ('deibri:);roncs, roncshalmaz, (ko)tormelek, hulladek

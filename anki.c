@@ -83,18 +83,18 @@ void print_header() {
 }
 
 void write_sandbox(FILE *fpw) {
-    fprintf(fpw, "2015-08-13 07:07:25;0;Please press any key to show the solution...;here you can see the solution, now press button <j>...\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;If you were wrong or had no clue...;press button <j> or <1>\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;If you had to think about...;press button <k> or <2>\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;If you knew it straight away...;press button <l> or <3>\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;You can add new cards...;just run %s -a\n", cmd);
-    fprintf(fpw, "2015-08-13 07:07:25;0;Now you can press ctrl-c and create some cards...;just run %s -a\n", cmd);
-    fprintf(fpw, "2015-08-13 07:07:25;0;Or You can add even add cards...;by editing %s directly\n", db_file_name);
-    fprintf(fpw, "2015-08-13 07:07:25;0;By editing %s mind the semicolon...;between your question and answer\n", db_file_name);
-    fprintf(fpw, "2015-08-13 07:07:25;0;Each line in %s is a card...;and has four parts.\n", db_file_name);
-    fprintf(fpw, "2015-08-13 07:07:25;0;1) Date in the given format like...;2099-08-13 07:07:25\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;2) Experiment score is...;a number\n");
-    fprintf(fpw, "2015-08-13 07:07:25;0;3) Question and answer are...;strings\n");
+    fprintf(fpw, ";;Please press any key to show the solution...;here you can see the solution, now press button <j>...\n");
+    fprintf(fpw, ";;If you were wrong or had no clue...;press button <j> or <1>\n");
+    fprintf(fpw, ";;If you had to think about...;press button <k> or <2>\n");
+    fprintf(fpw, ";;If you knew it straight away...;press button <l> or <3>\n");
+    fprintf(fpw, ";;You can add new cards...;just run %s -a\n", cmd);
+    fprintf(fpw, ";;Now you can press ctrl-c and create some cards...;just run %s -a\n", cmd);
+    fprintf(fpw, ";;Or You can add even add cards...;by editing %s directly\n", db_file_name);
+    fprintf(fpw, ";;By editing %s mind the semicolon...;between your question and answer\n", db_file_name);
+    fprintf(fpw, ";;Each line in %s is a card...;and has four parts.\n", db_file_name);
+    fprintf(fpw, ";;1) Date in the given format like...;2099-08-13 07:07:25\n");
+    fprintf(fpw, ";;2) Experiment score is...;a number\n");
+    fprintf(fpw, ";;3) Question and answer are...;strings\n");
 }
 
 void create_new_db_file(int sandbox) {
@@ -227,8 +227,6 @@ lesson *load_lessons() {
             qsort(lessons, lessons_size, sizeof(lesson), (compfn)compare_for_qsort);
             return lessons;
         }
-        if(c_line<4)
-            printf("-%s-",lessons[c_line].card_front);
     }
 }
 
