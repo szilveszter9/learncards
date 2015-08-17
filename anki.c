@@ -45,43 +45,40 @@ void init() {
 }
 
 void print_help() {
-    printf("\nanki clone in your console"
-            "\n\nOptions"
-            "\n h, -h, --help              show help"
-            "\n i, -i, --init [db name]    create initial database file if does not exist yet"
-            "\n a, -a, --add               add new cards"
-            "\n a, -a, --add               add new cards"
-            "\n\nExamples");
-    printf("\n %s i my_new_cards  -  will create a new empty database if does not exists yet", cmd);
+    printf("\n anki clone in your console"
+            "\n\n Options"
+            "\n  h, -h, --help              show help"
+            "\n  i, -i, --init [db name]    create initial database file if doesn't exist yet"
+            "\n  a, -a, --add               add new cards"
+            "\n  a, -a, --add               add new cards"
+            "\n\n Examples");
+    printf("\n  %s i my_new_cards  -  create a new empty database if it doesn't exists yet", cmd);
+    printf("\n  %s a my_new_cards  -  add cards to your database", cmd);
     printf("\n\n");
 }
 
 void welcome_help_detailed() {
     printf("\n\n Help"
+            "\n"
             "\n 1) Press any key to show the solution."
-            "\n 2) Use the <1><2><3> or <j><k><l> buttons in order to gain some points."
+            "\n"
+            "\n 2) Use the following keys in order to gain some points."
+            "\n"
             "\n         key      extra points                  you *"
             "\n     ~~~~~~~~~~   ~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             "\n     <1> or <j>        +1         * were wrong or had no clue"
             "\n     <2> or <k>        +4         * were right but had to think about that"
             "\n     <3> or <l>        +9         * knew it perfectly without any delay"
             "\n"
-            "\n 3) After every 4 cards you will be asked whether to continue.*"
-            "\n        key                         behaviour"
-            "\n     ~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-            "\n        <n>       will stop the study and quit, hope to see you soon."
-            "\n     any other    will keep going, have fun with another 4 cards."
-            "\n"
-            "\n    *Meanwhile an automated save happens."
+            "\n 3) Press <q> or <Esc> buttons to quit, hope to see you soon."
             "\n"
             "\n");
-    printf("\n Run %s -h for more help", cmd);
-    printf("\n\n You can use Ctrl-c any time to quit without any changes to your scores.\n\n");
+    printf("\n Run %s -h for more help\n\n", cmd);
 }
 
 void print_header() {
-    printf("\n\n %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
-    printf("\n %-20s%-20s%-5s%-20s",   "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
+    printf("\n\n    %-20s%-20s%-5s%-20s", "card", "solution", "exp", "sum experience");
+    printf("\n    %-20s%-20s%-5s%-20s",   "~~~~", "~~~~~~~~", "~~~", "~~~~~~~~~~~~~~");
 }
 
 void write_sandbox(FILE *fpw) {
@@ -237,7 +234,7 @@ void on_save_size_conflict() {
     printf("\n                Now you can press Ctrl-c safely and read the following instructions.");
     printf("\n***error*** Save failed due to the new database file would be smaller than the original."
             "\n            Possibly the original file has been modified by another application"
-            "\n            or you are running more anki for the same database file in parallel.");
+            "\n            or you are running multiple anki in parallel on the same database.");
     printf("\n***info***  For your safety your current changes have been saved to %s conflict file", db_conflict_file_name);
     printf("\n            while the original database file %s has been kept intact for now,", db_file_name);
     printf("\n            though it could be still overwritten if you keep continue and reach the last card,"
@@ -268,21 +265,29 @@ int save_lessons() {
     return 0;
 }
 
+void save_and_exit() {
+    save_lessons();
+    printf("\n\n ****************** Great job, see you soon! ******************\n\n");
+    exit(0);
+}
+
 int ask_for_proper_did_know() {
-    int did_know = 0;
-    while(did_know<1 || did_know>3) {
-        did_know = getch() - '0';
-        if(did_know>3) {
-            did_know = get_jkl_buttons_value(did_know);
+    int keypressed = 0;
+    while(keypressed<1 || keypressed>3) {
+        keypressed = getch() - '0';
+        if(keypressed == -21 || keypressed == 65)
+            save_and_exit();
+        if(keypressed>3) {
+            keypressed = get_jkl_buttons_value(keypressed);
         }
     }
-    return did_know;
+    return keypressed;
 }
 
 void save_and_reload_lessons() {
     save_lessons();
     lessons = load_lessons();
-    printf("\n***info*** save and reload lessons\n");
+    printf("\n ***info*** save and reload lessons\n");
 }
 
 void create_new_card(){
@@ -381,7 +386,7 @@ void handle_cli_options(int argc, char *argv[]) {
         else if(is("a") || is("add")) {
             if(argv[c_arg_idx + 1]) {
                 setup_filenames(argv[c_arg_idx + 1]);
-                printf("\n***info*** loading %s database...\n\n", argv[c_arg_idx + 1]);
+                printf("\n ***info*** loading %s database...\n\n", argv[c_arg_idx + 1]);
             }
             create_new_cards();
         }
@@ -391,7 +396,7 @@ void handle_cli_options(int argc, char *argv[]) {
             strcpy(filename, strcat(strcat(f, argv[c_arg_idx]), "_db.txt" ));
             if(access(filename, W_OK) == 0) {
                 setup_filenames(argv[c_arg_idx]);
-                printf("\n***info*** loading %s database...\n\n", argv[c_arg_idx]);
+                printf("\n ***info*** loading %s database...\n\n", argv[c_arg_idx]);
             }
             else {
                 printf("\n there is no such options or database in the current directory\n\n");
@@ -402,9 +407,14 @@ void handle_cli_options(int argc, char *argv[]) {
 }
 
 void welcome_help() {
-    printf("\n\n ******************** Happy studying! ********************");
-    printf("\n\n Press any key to continue, h for help, or Ctrl-c to quit.");
-    if(getch() - '0' == 56)
+    printf("\n\n *********************** Happy studying! **********************");
+    printf("\n\n Press any key to continue, h for help, <q> or <Esc> to quit.");
+    int keypressed = getch() - '0';
+    if(keypressed == -21 || keypressed == 65) {
+        printf("\n\n ******************** Hope to see you soon! *******************\n\n");
+        exit(0);
+    }
+    if(keypressed == 56)
         welcome_help_detailed();
 }
 
@@ -415,7 +425,6 @@ int main(int argc, char *argv[])
     init();
 
     handle_cli_options(argc, argv);
-    printf("loading lessons...");
 
     load_lessons();
 
@@ -436,23 +445,25 @@ int main(int argc, char *argv[])
             }
 
             // print card_front
-            printf("\n %-20s", lessons[c_line].card_front);
+            printf("\n%2i. %-20s", c_line + 1, lessons[c_line].card_front);
             if(strlen(lessons[c_line].card_front)>19)
-                printf("\n %-20s", " ");
+                printf("\n    %-20s", " ");
 
             // wait for card_back
-            getch();
+            int keypressed = getch() - '0';
+            if(keypressed == -21 || keypressed == 65)
+                save_and_exit();
             printf("%-20s", lessons[c_line].card_back);
             if(strlen(lessons[c_line].card_back)>19)
-                printf("\n %-40s", " ");
+                printf("\n    %-40s", " ");
 
             // ask for experience
-            int did_know = ask_for_proper_did_know(0);
-            printf("(%i)", did_know);
+            int rate = ask_for_proper_did_know(0);
+            printf("(%i)", rate);
 
             // print experience calculation
             int old_xp = atoi(lessons[c_line].experience);
-            int add_xp = did_know*did_know;
+            int add_xp = rate*rate;
             printf("%5i+%i", old_xp, add_xp);
 
             // set new experience
@@ -463,9 +474,6 @@ int main(int argc, char *argv[])
         }
 
         save_lessons();
-
-        printf("\n***continue?***  <n>-no  (any other keys)-yes\n");
-        finished = getch() - '0' == 62;
     }
     printf("\n");
 
