@@ -456,8 +456,7 @@ int main(int argc, char *argv[])
             }
 
             // if the card front is empty ask to complete
-            if(strlen(lessons[c_line].card_front) == 0
-                    && strlen(lessons[c_line].card_back) > 0) {
+            if(strlen(lessons[c_line].card_front) == 0) {
                 // show card_back
                 printf("\n%2i. %-20s", c_line + 1, "*_________________");
                 printf("%s", lessons[c_line].card_back);
@@ -466,12 +465,17 @@ int main(int argc, char *argv[])
                 printf("\n    ");
                 char input[128];
                 fgets(input, 128, stdin);
+
                 // if it is not only a linebreak
                 if(strcmp(input, "\n") != 0) {
                     strtok(input, "\n");
                     strcpy(lessons[c_line].card_front, input);
                     save_lessons();
                     printf("    %20s", "...saved.\n");
+
+                    //if solution is also missing than go back to this card in next loop
+                    if(strlen(lessons[c_line].card_back) == 0)
+                        c_line--;
                 }
                 else
                     printf("    * keep it empty\n");
