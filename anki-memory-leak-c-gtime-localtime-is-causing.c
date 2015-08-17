@@ -23,9 +23,9 @@ char *cmd;
 
 typedef struct lesson_class_struct {
     char date[20];
-    char card_front[128];
-    char card_back[128];
-    char experience[32];
+    char *card_front;
+    char *card_back;
+    char *experience;
     int seen;
 } lesson;
 
@@ -178,8 +178,9 @@ char *iso_time() {
     time_t t = time(NULL);
     struct tm now = *localtime(&t);
     char *strformat = "%F %H:%M:%S";
-    strftime(iso_time_string, 20, strformat, &now);
-    return iso_time_string;
+    strftime(iso_time_string, 19, strformat, &now);
+    return "0000-00-00 00:00:00";
+    //return iso_time_string;
 }
 
 lesson *load_lessons() {
@@ -198,9 +199,9 @@ lesson *load_lessons() {
         int c_char;
         int column = 0;
 
-        //lessons[c_line].card_front = malloc(128);
-        //lessons[c_line].card_back = malloc(128);
-        //lessons[c_line].experience = malloc(32);
+        lessons[c_line].card_front = malloc(128);
+        lessons[c_line].card_back = malloc(128);
+        lessons[c_line].experience = malloc(32);
 
         for(c_char = 0;; c_char++) {
             nextchar = fgetc(fp);
@@ -209,7 +210,14 @@ lesson *load_lessons() {
             }
             else if(nextchar == ';') {
                 if(column == 0 && c_char == 0) {
-                    strcpy(lessons[c_line].date, iso_time());
+                    iso_time();
+                    strcpy(lessons[c_line].date, "0000-00-00 00:00:00");
+                    //strcpy(lessons[c_line].date, iso_time());
+
+                    //time_t t = time(NULL);
+                    //struct tm now = *localtime(&t);
+                    //char strformat[] = "%Y-%m-%d %H:%M:%S";
+                    //strftime(lessons[c_line].date, 20, strformat, &now);
                 }
                 column++;
                 c_char = -1;
@@ -343,13 +351,13 @@ void create_new_card(){
     strtok(experience, "\n");
 
     // allocate memory
-    //lessons[lessons_size].card_front = malloc(128);
-    //lessons[lessons_size].card_back = malloc(128);
-    //lessons[lessons_size].experience = malloc(32);
+    lessons[lessons_size].card_front = malloc(128);
+    lessons[lessons_size].card_back = malloc(128);
+    lessons[lessons_size].experience = malloc(32);
 
     // set front, back, and experience
-    strcpy(lessons[lessons_size].card_front, card_front);
-    strcpy(lessons[lessons_size].card_back, card_back);
+    lessons[lessons_size].card_front = card_front;
+    lessons[lessons_size].card_back = card_back;
     sprintf(lessons[lessons_size].experience, "%i", atoi(experience));
 
     // set current date/time
