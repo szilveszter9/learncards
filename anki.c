@@ -455,33 +455,78 @@ int main(int argc, char *argv[])
                 save_and_reload_lessons();
             }
 
-            // print card_front
-            printf("\n%2i. %-20s", c_line + 1, lessons[c_line].card_front);
-            if(strlen(lessons[c_line].card_front)>19)
-                printf("\n    %-20s", " ");
+            // if the card front is empty ask to complete
+            if(strlen(lessons[c_line].card_front) == 0
+                    && strlen(lessons[c_line].card_back) > 0) {
+                // show card_back
+                printf("\n%2i. %-20s", c_line + 1, "*_________________");
+                printf("%s", lessons[c_line].card_back);
+                printf("\n    * missing question");
+                printf("\n    * Please enter the question.");
+                printf("\n    ");
+                char input[128];
+                fgets(input, 128, stdin);
+                // if it is not only a linebreak
+                if(strcmp(input, "\n") != 0) {
+                    strtok(input, "\n");
+                    strcpy(lessons[c_line].card_front, input);
+                    save_lessons();
+                    printf("    %20s", "...saved.\n");
+                }
+                else
+                    printf("    * keep it empty\n");
+            }
+            else{
+                // print card_front
+                printf("\n%2i. %-20s", c_line + 1, lessons[c_line].card_front);
+                if(strlen(lessons[c_line].card_front)>19)
+                    printf("\n    %-20s", " ");
 
-            // wait for card_back
-            int keypressed = getch() - '0';
-            if(keypressed == -21 || keypressed == 65)
-                save_and_exit();
-            printf("%-20s", lessons[c_line].card_back);
-            if(strlen(lessons[c_line].card_back)>19)
-                printf("\n    %-40s", " ");
+                // if the card back is empty ask to complete
+                if(strlen(lessons[c_line].card_back) == 0) {
+                    printf("*_________________");
+                    printf("\n    %-20s%s", "", "* missing solution");
+                    printf("\n    %-20s%s", "", "* Please enter the solution.");
+                    printf("\n    %-20s", "");
+                    char input[128];
+                    fgets(input, 128, stdin);
+                    // if it is not only a linebreak
+                    if(strcmp(input, "\n") != 0) {
+                        strtok(input, "\n");
+                        strcpy(lessons[c_line].card_back, input);
+                        save_lessons();
+                        printf("    %-20s%20s", "", "...saved.\n");
+                    }
+                    else
+                        printf("    %-20s%s", "", "* keep it empty\n");
+                }
+                else {
+                    // wait for card_back
+                    int keypressed = getch() - '0';
+                    if(keypressed == -21 || keypressed == 65)
+                        save_and_exit();
 
-            // ask for experience
-            int rate = ask_for_proper_did_know(0);
-            printf("(%i)", rate);
+                    // show card_back
+                    printf("%-20s", lessons[c_line].card_back);
+                    if(strlen(lessons[c_line].card_back)>19)
+                        printf("\n    %-40s", " ");
 
-            // print experience calculation
-            int old_xp = atoi(lessons[c_line].experience);
-            int add_xp = rate*rate;
-            printf("%5i+%i", old_xp, add_xp);
+                    // ask for experience
+                    int rate = ask_for_proper_did_know(0);
+                    printf("(%i)", rate);
 
-            // set new experience
-            sprintf(lessons[c_line].experience, "%i", old_xp + add_xp);
+                    // print experience calculation
+                    int old_xp = atoi(lessons[c_line].experience);
+                    int add_xp = rate*rate;
+                    printf("%5i+%i", old_xp, add_xp);
 
-            // print sum experience
-            printf("=%4s\n", lessons[c_line].experience);
+                    // set new experience
+                    sprintf(lessons[c_line].experience, "%i", old_xp + add_xp);
+
+                    // print sum experience
+                    printf("=%4s\n", lessons[c_line].experience);
+                }
+            }
         }
 
         save_lessons();
