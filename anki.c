@@ -23,8 +23,8 @@ char *cmd;
 
 typedef struct lesson_class_struct {
     char date[20];
-    char card_front[128];
-    char card_back[128];
+    char card_front[256];
+    char card_back[256];
     char experience[32];
     int seen;
 } lesson;
@@ -198,8 +198,8 @@ lesson *load_lessons() {
         int c_char;
         int column = 0;
 
-        //lessons[c_line].card_front = malloc(128);
-        //lessons[c_line].card_back = malloc(128);
+        //lessons[c_line].card_front = malloc(256);
+        //lessons[c_line].card_back = malloc(256);
         //lessons[c_line].experience = malloc(32);
 
         for(c_char = 0;; c_char++) {
@@ -305,14 +305,14 @@ void save_and_reload_lessons() {
 }
 
 void create_new_card(){
-    char *card_front = malloc(128);
-    char *card_back = malloc(128);
+    char *card_front = malloc(256);
+    char *card_back = malloc(256);
     char *experience = malloc(32);
 
     // ask for user input
     printf("\n enter card front: ");
     while(1) {
-        fgets(card_front, 128, stdin);
+        fgets(card_front, 256, stdin);
         if(strlen(card_front) > 1) {
             strtok(card_front, "\n");
             break;
@@ -325,7 +325,7 @@ void create_new_card(){
 
     printf(" enter card back:  ");
     while(1) {
-        fgets(card_back, 128, stdin);
+        fgets(card_back, 256, stdin);
         if(strlen(card_back) > 1) {
             strtok(card_back, "\n");
             break;
@@ -341,8 +341,8 @@ void create_new_card(){
     strtok(experience, "\n");
 
     // allocate memory
-    //lessons[lessons_size].card_front = malloc(128);
-    //lessons[lessons_size].card_back = malloc(128);
+    //lessons[lessons_size].card_front = malloc(256);
+    //lessons[lessons_size].card_back = malloc(256);
     //lessons[lessons_size].experience = malloc(32);
 
     // set front, back, and experience
@@ -463,8 +463,8 @@ int main(int argc, char *argv[])
                 printf("\n    * missing question");
                 printf("\n    * Please enter the question.");
                 printf("\n    ");
-                char input[128];
-                fgets(input, 128, stdin);
+                char input[256];
+                fgets(input, 256, stdin);
 
                 // if it is not only a linebreak
                 if(strcmp(input, "\n") != 0) {
@@ -492,8 +492,8 @@ int main(int argc, char *argv[])
                     printf("\n    %-20s%s", "", "* missing solution");
                     printf("\n    %-20s%s", "", "* Please enter the solution.");
                     printf("\n    %-20s", "");
-                    char input[128];
-                    fgets(input, 128, stdin);
+                    char input[256];
+                    fgets(input, 256, stdin);
                     // if it is not only a linebreak
                     if(strcmp(input, "\n") != 0) {
                         strtok(input, "\n");
