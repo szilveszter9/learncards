@@ -1,28 +1,5 @@
-2015-08-18 11:29:50;9;... to you (in radio);..., vissza hozzad (radioban)
-2015-08-18 11:29:50;9;crank-arm;forgattyukar
-2015-08-18 11:29:50;9;quote on quote;idezojelben (ironikusan)
-2015-08-18 11:29:50;9;simplify;leegyszerusit, egyszerubbe tesz, megkonnyit, konnyen erthetove tesz
-2015-08-18 11:29:50;1;reduction;kisebbites, kicsinyites, csokkentes
-2015-08-18 11:29:50;9;myriad;miriad, szamtalan
-2015-08-18 11:29:50;1;mandate;utasitas, rendelkezes, meghagyas
-2015-08-18 11:29:50;9;intact;sertetlen, ep
-2015-08-18 11:29:50;0;parallel;parhuzamos
-2015-08-18 11:29:50;0;authenticity;hitelesseg, ervenyesseg
-2015-08-18 11:29:50;0;conversion;atteres, megteres (vallasra), atallas, atlepes (politikai parthoz)
-2015-08-18 11:29:50;0;conduct;vezetes, intezes, igazgatas
-2015-08-18 11:29:50;0;advocate;tamogato, vedo, partolo
-2015-08-18 11:29:50;0;tackling;megragadas, megmarkolas
-2015-08-18 11:29:50;0;compelling;kenyszerito (ero), ellenalhatatlan (kivansag), parancsolo, keszteto, surgeto (szukseg)
-2015-08-18 11:29:50;0;offer;ajanlat, kinalat
-2015-08-18 11:29:50;0;initiative;kezdo, kezdeti, kezdemenyezes
-2015-08-18 11:29:50;0;which is far preferable to something; ami sokkal elonyosebb mint valami
-2015-08-18 11:29:50;0;rank-arm;forgattyukar
-2015-08-18 11:29:50;0;cog;fogaskerek
-2015-08-18 11:29:50;0;spoke;kullo
-2015-08-18 11:29:50;0;rim;abroncs
-2015-08-18 11:29:50;0;clamp;kapocs,fogo,saru,satu
-2015-08-18 11:29:50;0;protrude;kiall,eloreall
-2015-08-18 11:29:50;0;suspension;felfuggesztes
+2015-08-18 11:29:50;1;protrude;kiall,eloreall
+2015-08-18 11:29:50;9;suspension;felfuggesztes
 2015-08-18 11:29:50;0;valve stem;szelep szar
 2015-08-18 11:29:50;0;stem;sza'r
 2015-08-18 11:29:50;0;drivetrain;hajtomu
@@ -88,3 +65,127 @@
 2015-08-18 11:29:50;0;firmly;szilardan, erosen, hatarozottan
 2015-08-18 11:29:50;0;scatter;szor, szorodas
 2015-08-18 11:29:50;0;debris ('deibri:);roncs, roncshalmaz, (ko)tormelek, hulladek
+2015-08-18 11:29:50;1;conduct;vezetes, intezes, igazgatas
+2015-08-18 11:29:50;1;tackling;megragadas, megmarkolas
+2015-08-18 11:29:50;1;rank-arm;forgattyukar
+2015-08-18 11:29:50;1;spoke;kullo
+2015-08-18 11:29:50;1;rim;abroncs
+2015-08-18 11:29:50;1;clamp;kapocs,fogo,saru,satu
+2015-08-18 11:29:50;1;reduction;kisebbites, kicsinyites, csokkentes
+2015-08-18 11:29:50;1;mandate;utasitas, rendelkezes, meghagyas
+2015-08-18 11:29:50;4;conversion;atteres, megteres (vallasra), atallas, atlepes (politikai parthoz)
+2015-08-18 11:29:50;4;compelling;kenyszerito (ero), ellenalhatatlan (kivansag), parancsolo, keszteto, surgeto (szukseg)
+2015-08-18 11:29:50;4;offer;ajanlat, kinalat
+2015-08-18 11:29:50;4;which is far preferable to something; ami sokkal elonyosebb mint valami
+2015-08-18 11:29:50;9;parallel;parhuzamos
+2015-08-18 11:29:50;9;authenticity;hitelesseg, ervenyesseg
+2015-08-18 11:29:50;9;advocate;tamogato, vedo, partolo
+2015-08-18 11:29:50;9;initiative;kezdo, kezdeti, kezdemenyezes
+2015-08-18 11:29:50;9;cog;fogaskerek
+2015-08-18 11:29:50;9;... to you (in radio);..., vissza hozzad (radioban)
+2015-08-18 11:29:50;9;crank-arm;forgattyukar
+2015-08-18 11:29:50;9;quote on quote;idezojelben (ironikusan)
+2015-08-18 11:29:50;9;simplify;leegyszerusit, egyszerubbe tesz, megkonnyit, konnyen erthetove tesz
+2015-08-18 11:29:50;9;myriad;miriad, szamtalan
+2015-08-18 11:29:50;9;intact;sertetlen, ep
+;;absorb;elnyel, felsziv
+;;abandon;elhagy, otthagy, sorsara hagy
+;;diligent;szorgalmas, igyekvo
+;;caveat;ellentmondas, kifogas, ~ to - vmi ellen
+;;perform;veghezvisz, elvegez
+;;comprehensive;atfogo, szeleskoru, kiterjedt, 2. felfogo, megerto
+;;afore;elott, elobb
+;;bypass;kikerul, megkerul
+;;beforehand;elozoleg, elozetesen
+;;clumsy;ugyetlen, esetlen
+;;clumsily;ugyetlenul, esetlenul
+;;clumsiness;ugyetlenseg, esetlenseg
+;;boots;szolga, cipotisztito, londiner (szallodaban, penzioban)
+;;assumable;felteheto, feltetelezheto, gyanithato, vallalhato
+;;responsibility;felelosseg
+;;assumable responsibility;vallalhato felelosseg
+;;dispute;vita, vitatkozas
+;;hail;zapor, jegeso
+;;repugnant, abominable;undorito, ellenszenves, visszataszito
+;;trip up;elgancsol, elbuktat, felbuktat, 2. megbotlik, elbotlik
+;;conflict;kuzdelem, harc, viszaly
+;;antagonism;ellentetesseg, kibekithetetlen ellentet, ellentmondas, szembenallas
+;;contradiction;ellentmondas, ellentet
+;;excitement;izgatottsag, izgalom, felindultsag, feldultsag
+;;buzz;zummoges, dongas, zugas, bugas
+;;difference;kulonbseg
+;;co-educational;koedukacios, vegyes, kozos (iskola)
+;;common;kozonseges, kozos, egyuttes
+;;fontal;forrasbol eredo, eredeti, kezdeti, legelso, alapveto (igazsag), 2. keresztelo
+;;genuine;eredeti, valos, hiteles, igazi, valodi
+;;detached;levalasztott, elkulonitett
+;;discrete;kulonallo, szetvalasztott, nem osszefuggo
+;;separate;elvalasztott, elkulonitett
+;;additional;utolagos, kiegeszito, hozzafuggesztett, hozzaadott, tovabbi, jarulekos
+;;distinct;kulonbozo, eltero, eluto, elhatarolhato, megkulonboztetheto, 2.  tiszta, vilagos, pontos, pontosan kiveheto
+;;opposed;ellentetes, szembenallo, ellenseges
+;;stack;halom, kupac
+;;stacker;maglyazo, boglyarako munkas
+;;metre;versmertek, utem, meter
+;;stack-pipe;lefolyocso, csatorna
+;;boiling;forro, forrasban levo
+;;expansively;szeleskoruen, atfogoan, terjedelmesen, kimeritoen
+;;absolutely;feltetlenul, teljesen, korlatlanul, fuggetlenul, 2. biz. valoban
+;;fully, teljesen, teljes mertekben
+;;regardless;gondtalan, figyelmetlen, kimeletlen, be ~ of sg, nincs tekintettel vkire/vmire
+;;spill spilt spilled;kilottyen, kiont, 2. eses, bukas (lorol, kerekparrol)
+;;confess;bevall, megvall, beismer, elismer
+;;vowel;maganhangzo
+;;consonant, articulation;massalhangzo
+;;articulation;tagozodas, tagozottsag, orv. osszeillesztes, illeszkedes, izulet,
+;;vow;unnepelyes fogadas/igeret, fogadalom, esku
+;;anxiety;aggodas, aggodalom
+;;sketch;vazlat, skicc
+;;knot;csomo, gob, bog, szalag, masni
+;;be worth something;meger vmit
+;;what's it worth?;mennyit er?
+;;adjective;melleknevi
+;;take took taken;vesz, fog, igenyel, kovetel, szuksege van, veves, vetel, megfogas (vadaszatban)
+;;rid;megszabadit, ~ of vmitol
+;;denotation;megjeloles, kijeloles, 2. jelentes, ertelem (szoe) 3. jelzes, utalas, szimbolum, jelkep 4. jel, tunet, szimptoma
+;;redeem;megvalt, visszafizet, megad, megterit, torleszt
+;;kick off;lerug (cipot)
+;;comprise;magaban foglal, tartalmaz, all valamibol 2. osszesurit, osszefoglal
+;;subdivision;elaprozodas, reszekre osztas, felosztas
+;;depict;lerajzol, rajzol, lefest
+;;contingent;veletlen, varatlan, bizonytalan, felteteles, esetleges
+;;contingent matter;lehetoseget felallito tetel (filozofia)
+;;hallmark;femjelzes, finomsagi proba
+;;presume;feltesz, feltetelez, velelmez, gyanit, vel, sejt
+;;aggregation;halmaz, csoportosulas, aggregacio, halmozodas, csoportositas, aggregalas
+;;contained;tartozkodo magatartas
+;;containment;tartozkodo magaviselet
+;;peculiar;sajatsagos, jellegzetes, b) kulonleges, kulonos, specialis, c) kulonos, furcsa, 2. tulajdon, sajat
+;;implication;belekeveredes, belevonas, belefoglalas, 2. hallgatolagos kovetkeztetes, 3.jelentoseg, hordero 4.sejtetes, burkolt celzas
+;;argument;erv, indok, argumentum
+;;causality;okozati viszony, oksag, okbeliseg, kauzalitas
+;;dependence;fuggoseg, fugges, fuggo viszony
+;;causal;okozati viszony, okbeli, kauzalis
+;;conform;osszehangol, osszhangba hoz, 2.osszhangban van, osszefer, megegyezik, alkalmazkodik, hozzaidomul
+;;differentiate;megkulonboztet, szetvalaszt, mas iranyban fejleszt, masfelekeppen alakit, 2. elszakad, elvalik (fejlodesben)
+;;conceive;felfog, megert, 2.velekedik, vmilyen elkepzelese van, 3. megfogalmaz, szavakba ont
+;;conceived as follows;a kovetkezo megfogalmazasban
+;;fiddle;hegedu, 2. ravasz fogas, trukk, 3.becsap, megcsal
+;;fiddling;jatszik (hegedun)
+;;shend;megszegyenit, megalaz, leszid
+;;anxious;nyugtalan, aggodo, rosszkevu, gondterhelt
+;;nervous;ideges, ingerlekeny
+;;reorder;utanrendel, ujbol rendel
+;;acquit;rendez, kiegyenlit, eleget tesz, 2. nyugtaz
+;;throttle;szabalyozo, elzaro szelep
+;;split up;felhasogat, szethasogat, szetdarabol
+;;ingestion;taplalekfelvetel, lenyeles, elfogyasztas, bejuttatas
+;;newly;ujonnan, frissen, nemreg
+;;grain;gabona
+;;deprecate;helytelenit, kifogasol
+;;case;ugy, eset, esemeny, tortenes, elofordulas
+;;encase;ladaba zar, befoglal, beilleszt
+;;shall should;fog, fogunk
+;;shall you come tomorrow?;eljosz holnap?
+;;according (to sg);valami szerint/ertelmeben, alapjan
+;;acceptably;elfogadhatoan, elfogadhato modon, megfeleloen, turhetoen, eleg jol
