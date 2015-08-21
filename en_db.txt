@@ -189,3 +189,37 @@
 ;;shall you come tomorrow?;eljosz holnap?
 ;;according (to sg);valami szerint/ertelmeben, alapjan
 ;;acceptably;elfogadhatoan, elfogadhato modon, megfeleloen, turhetoen, eleg jol
+;;shout out;kikialt
+;;get got gotten;kap, szerez, szert tesz, keres, eler
+;;petite;kicsi es torekeny, filigran
+;;staple;tartos, allando, 2. zaroszem, kotes, utkozo, csappano
+;;downright;egyenes, nyilt, oszinte
+;;accordingly;aszerint, eszerint, annak/ennek megfeleloen
+;;necessary;szukseges, nelkulozhetetlen, elengedhetetlen
+;;ready;kesz, befejezett
+;;brimming;tularado, bovelkedo
+;;animation;elenkseg, elevenseg, lendulet, serkentes, biztatas, buzditas, mozgatas, eletre keltes, rajzfilmkeszites
+;;vivification;felelevenites, felelenkites, felelesztes, eletrekeltes
+;;waken;felebreszt, felkelt, felelevenit
+;;be awake;ebren van, felebredt
+;;keep awake;virraszt, fenn/ebren marad
+;;resurrection;feltamadas, feleledes, feltamasztas, felelesztes, 2. kihantolas, exhumalas
+;;surrogate;potanyag, potszer, helyettes (puspoke), hagyateki biro
+;;surrogating;helyetteskent alkalmaz, utodkent megjelol
+;;bring round;elhoz, elohoz, magaval hoz, vhova/hazhoz szallit, 2. magahoz terit, eszmeletre hoz, 3. meggyoz, megnyer, megterit
+;;enkindle;gyujt, szit, gerjeszt, langra lobbant, feleleszt, felszit
+;;overfraught;tulterhelt, tulsagosan megrakott
+;;fraught;telve, teli, megterhelt, megrakott, tele, ellatott, felszerelt, 2. rakomany
+;;against;ellen, szemben
+;;rake;gereblye
+;;rally;gyulekezes
+;;revive;feleleszt ujraeleszt, eszmeletre hoz, megujit, felelevenit
+;;heal;gyogyit, kigyogyit, behegeszt
+;;liven up;felelenkul, megelenkul, felelenkit, fellelkesit, felderit, felvidit
+;;substitute;behelyettesito, potlo, pot-
+;;heap;rakas, halom, kupac
+;;subscription;alairas, csatlakozas, hozzajarulas (vmhez), elofizetes (ujsagra)
+;;order;rend, rang, osztaly, rend (egyhaz-, lovag-), 2.sorrend, 3. rendszer, tarsadalmi rend, 4. rendjel, erdem, nagysagrend, fokozat, 3. ker. rendel
+;;override;1. hatalytalanit, 2. elnyom, uralkodik, 3. agyonhajszol, 4. belovalog, feldul, legazol
+;;between;kozott (terben, idoben), koze, kozben
+;;amid;kozott, kozepett
