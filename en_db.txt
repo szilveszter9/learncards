@@ -221,5 +221,20 @@
 ;;subscription;alairas, csatlakozas, hozzajarulas (vmhez), elofizetes (ujsagra)
 ;;order;rend, rang, osztaly, rend (egyhaz-, lovag-), 2.sorrend, 3. rendszer, tarsadalmi rend, 4. rendjel, erdem, nagysagrend, fokozat, 3. ker. rendel
 ;;override;1. hatalytalanit, 2. elnyom, uralkodik, 3. agyonhajszol, 4. belovalog, feldul, legazol
-;;between;kozott (terben, idoben), koze, kozben
+;;between;(distinct individual) kozott (terben, idoben), koze, kozben
 ;;amid;kozott, kozepett
+;;among;(not distinct items) kozott
+;;midst;kozepen
+;;government;iranyitas, vezetes
+;;in-between;kozvetito, atmeneti ket veglet kozott
+;;within;benn, bent, belul
+;;accept;elfogad, hozzajarul, beleegyezik
+;;administer;kormanyoz, igazgat
+;;adopt;orokbe fogad, magahoz vesz, 2. magaeva tesz, valaszt (hivatast)
+;;adapt;hozza illeszt/alkalmaz, alkalmassa tesz, alakit, atdolgoz
+;;chase;uldoz, hajszol
+;;aid;segitseg, segely, tamogatas
+;;flower-stalk;szar (virage)
+;;haulm;fuszal, noveny szara, 2. szalma
+;;regarding;figyelemmel, tekintettel, illetoleg
+;;clank;csorges, csorompoles
