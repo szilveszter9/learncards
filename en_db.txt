@@ -238,3 +238,24 @@
 ;;haulm;fuszal, noveny szara, 2. szalma
 ;;regarding;figyelemmel, tekintettel, illetoleg
 ;;clank;csorges, csorompoles
+;;overhaul;kivizsgalas (betege), alapos atvizsgalas (gepe)
+;;blemish;hiba, fogyatekossag (testi, erkolcsi), beszennyez, bemocskol (becsuletet), elront, tonkretesz
+;;fatless;sovany, zsirtalan
+;;fatique;faradtsag, kimerultseg
+;;par (pa:);egyenloseg, egyenrangusag, egyenertek
+;;once;hajdani, 2. egyszer, egy izben
+;;reach;eleres, kinyujtas (kare)
+;;assess;megallapit, eloir, kiro, kivet, felbecsul, felvesz, leltaroz
+;;escalate ~ating;felfokoz, kiterjeszt, novel, novekszik, kiterjed
+;;transitive;targyas igenyes
+;;vt;verb transitive - targyas ige
+;;vi;verb intransitive - targytalan ige
+;;participle;melleknevi igenev
+;;pp;past/passive participle - mult ideju melleknevi igenev
+;;pt;past tense - mult ido
+;;intrusion;betolakodas, befurakodas, raeroszakolas
+;;showcase;bemutat, szemlere kitesz, 2. kirakatszekreny, uvegszekreny, vitrin, tarolo
+;;directive (di'rektiv);iranyito, utmutato, jelzo, utmutatas
+;;obtain;megszerez, elnyer, eler, megkap, hozzajut
+;;provide;szolgaltat
+;;enhance (en'ha:ns);kiemel, fokoz, novel, emel
