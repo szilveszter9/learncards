@@ -259,3 +259,4 @@
 ;;obtain;megszerez, elnyer, eler, megkap, hozzajut
 ;;provide;szolgaltat
 ;;enhance (en'ha:ns);kiemel, fokoz, novel, emel
+;;rendition;feladas, atadas, szolgaltatas
