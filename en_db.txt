@@ -260,3 +260,4 @@
 ;;provide;szolgaltat
 ;;enhance (en'ha:ns);kiemel, fokoz, novel, emel
 ;;rendition;feladas, atadas, szolgaltatas
+;;genuine (d3enjuin);eredeti,valodi,hiteles
