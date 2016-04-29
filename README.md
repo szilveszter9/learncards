@@ -4,19 +4,31 @@ Description
 ===========
 Learncards is a tiny anki-like flashcard application for use in your terminal. Written in - almost ANSI - C
 
-Github
-======
+Helps you to study your favourite subjects in a very efficient way.
+
+It is simple but more fun.
+
+
+You can create your own packs/databases and edit or add new cards easily.
+
+If you are in rush you can also add just one front side of a card,
+
+and during your training you can also edit the back side.
+
+The packs are simple text files you can also edit them with your favourite editor.
+
+Put your packs into your favourite version control system.
+
+Share your favourite packs with your friends send them via email or slack
+
+or make it even public eg. on github or bitbucket.
+
+Open source
+===========
 https://github.com/szilveszter9/learncards
 
 Install and run the tutorial
 ============================
-* If you'd like to build it your own:
-```shell
-git clone https://github.com/szilveszter9/learncards
-cd learncards
-gcc anki.c -Wall -o anki
-./anki
-```
 * If you are happy with the provided binary
 ```shell
 git clone https://github.com/szilveszter9/learncards
@@ -24,16 +36,24 @@ cd learncards
 ./anki
 ```
 
-Start with your own cards
-=========================
-* There is an en-hu database I've built for my own purposes.
-I run it like this:
+My pack example
+===============
+* There is an example 'en-hu' database - I've built for my own purposes.
+I start my training with the following command:
 ```shell
 ./anki en-hu
 ```
+When I want to stop the training I just close the application by pressing 'q' at any point.
 
-Build your own pack
-===================
+Create your own pack
+====================
+```shell
+./anki i my_new_cards  -  create a new empty database if it doesn't exists yet
+./anki a my_new_cards  -  add new cards to your database
+```
+
+Build your own pack with your favourite editor
+==============================================
 ```text
 You can create a database simply by creating a text file.
 
@@ -63,6 +83,15 @@ Try:
 ```
 A great place to find accents by languages:
 http://www.typeit.org/
+
+Build it your own
+=================
+```shell
+git clone https://github.com/szilveszter9/learncards
+cd learncards
+gcc anki.c -Wall -o anki
+./anki
+```
 
 Contribution
 ============
